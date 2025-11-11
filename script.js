@@ -1,127 +1,75 @@
-// Données d'exemple
-const sampleData = [
-    {
-        id: 1,
-        entreprise_id: "AAPL",
-        date_analyse: "2024-01-15",
-        periode: "T4 2023",
-        roe: "15.2%",
-        netMargin: "12.5%",
-        grossMargin: "45.3%",
-        recommandation: "Acheter",
-        created_at: "2024-01-16 10:30:00",
-        sgaMargin: "18.2%",
-        debtToEquity: "0.45",
-        currentRatio: "2.1",
-        interestCoverage: "8.5",
-        peRatio: "18.3",
-        earningsYield: "5.5%",
-        priceToFCF: "15.2",
-        priceToMM200: "1.05",
-        dividendYield: "2.8%",
-        pbRatio: "2.1",
-        pegRatio: "1.2",
-        roic: "12.8%",
-        freeCashFlow: "125M",
-        evToEbitda: "10.5",
-        score_global: "78/100",
-        points_forts: "Croissance stable, Dividende fiable, Trésorerie solide",
-        points_faibles: "Dette élevée, Concurrence forte"
-    },
-    {
-        id: 2,
-        entreprise_id: "MSFT",
-        date_analyse: "2024-01-14",
-        periode: "T4 2023",
-        roe: "8.7%",
-        netMargin: "8.1%",
-        grossMargin: "32.1%",
-        recommandation: "Conserver",
-        created_at: "2024-01-15 14:20:00",
-        sgaMargin: "22.5%",
-        debtToEquity: "0.78",
-        currentRatio: "1.4",
-        interestCoverage: "4.2",
-        peRatio: "22.1",
-        earningsYield: "4.5%",
-        priceToFCF: "18.7",
-        priceToMM200: "0.95",
-        dividendYield: "1.2%",
-        pbRatio: "1.8",
-        pegRatio: "1.8",
-        roic: "9.2%",
-        freeCashFlow: "89M",
-        evToEbitda: "12.8",
-        score_global: "65/100",
-        points_forts: "Position marché forte, Innovation cloud",
-        points_faibles: "Marge en baisse, Régulation"
-    },
-    {
-        id: 3,
-        entreprise_id: "TSLA",
-        date_analyse: "2024-01-13",
-        periode: "T4 2023",
-        roe: "22.1%",
-        netMargin: "15.8%",
-        grossMargin: "28.4%",
-        recommandation: "Acheter",
-        created_at: "2024-01-14 09:15:00",
-        sgaMargin: "15.3%",
-        debtToEquity: "0.32",
-        currentRatio: "3.2",
-        interestCoverage: "12.5",
-        peRatio: "45.2",
-        earningsYield: "2.2%",
-        priceToFCF: "28.4",
-        priceToMM200: "1.25",
-        dividendYield: "0.0%",
-        pbRatio: "8.5",
-        pegRatio: "2.1",
-        roic: "18.7%",
-        freeCashFlow: "156M",
-        evToEbitda: "35.2",
-        score_global: "82/100",
-        points_forts: "Innovation, Croissance rapide, Leadership EVs",
-        points_faibles: "Volatilité, Concurrence EVs"
-    },
-    {
-        id: 4,
-        entreprise_id: "GOOGL",
-        date_analyse: "2024-01-12",
-        periode: "T4 2023",
-        roe: "18.5%",
-        netMargin: "21.3%",
-        grossMargin: "58.7%",
-        recommandation: "Acheter",
-        created_at: "2024-01-13 11:45:00",
-        sgaMargin: "12.8%",
-        debtToEquity: "0.25",
-        currentRatio: "2.8",
-        interestCoverage: "15.2",
-        peRatio: "25.8",
-        earningsYield: "3.9%",
-        priceToFCF: "20.1",
-        priceToMM200: "1.12",
-        dividendYield: "0.0%",
-        pbRatio: "5.2",
-        pegRatio: "1.4",
-        roic: "15.3%",
-        freeCashFlow: "89M",
-        evToEbitda: "18.4",
-        score_global: "85/100",
-        points_forts: "Dominance marché, Trésorerie solide, Données",
-        points_faibles: "Régulation, Dépendance publicité"
-    }
-];
+// Configuration de la base de données
+const DB_CONFIG = {
+    connectionString: 'postgresql://neondb_owner:npg_BA2xWJemNa6k@ep-red-resonance-ag335bym-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+};
 
-let currentData = [...sampleData];
+let currentData = [];
 let sortConfig = { key: null, direction: 'asc' };
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
-    displayData(currentData);
+    loadDataFromDB();
     setupEventListeners();
 });
+
+async function loadDataFromDB() {
+    showLoading(true);
+    
+    try {
+        const response = await fetch('/api/financial-data');
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        currentData = data;
+        displayData(currentData);
+        showError(null);
+        
+    } catch (error) {
+        console.error('Erreur lors du chargement des données:', error);
+        showError('Erreur de connexion à la base de données. Vérifiez que le serveur backend est démarré.');
+        // Chargement des données d'exemple en cas d'erreur
+        loadSampleData();
+    } finally {
+        showLoading(false);
+    }
+}
+
+function loadSampleData() {
+    // Données d'exemple en cas d'échec de connexion
+    currentData = [
+        {
+            id: 1,
+            entreprise_id: 1,
+            date_analyse: "2024-01-15",
+            periode: "T4 2023",
+            roe: 15.2,
+            netmargin: 12.5,
+            grossmargin: 45.3,
+            recommandation: "Acheter",
+            created_at: "2024-01-16T10:30:00.000Z",
+            sgamargin: 18.2,
+            debttoequity: 0.45,
+            currentratio: 2.1,
+            interestcoverage: 8.5,
+            peratio: 18.3,
+            earningsyield: 5.5,
+            pricetofcf: 15.2,
+            pricetomm200: 1.05,
+            dividendyield: 2.8,
+            pbratio: 2.1,
+            pegratio: 1.2,
+            roic: 12.8,
+            freecashflow: 125000000,
+            evtoebitda: 10.5,
+            score_global: 78,
+            points_forts: "Croissance stable, Dividende fiable, Trésorerie solide",
+            points_faibles: "Dette élevée, Concurrence forte"
+        }
+    ];
+    displayData(currentData);
+}
 
 function setupEventListeners() {
     // Recherche globale
@@ -132,8 +80,13 @@ function setupEventListeners() {
     // Réinitialisation
     document.getElementById('resetFilters').addEventListener('click', function() {
         document.getElementById('globalSearch').value = '';
-        currentData = [...sampleData];
+        currentData = [...currentData]; // Reset to original loaded data
         displayData(currentData);
+    });
+
+    // Actualisation des données
+    document.getElementById('refreshData').addEventListener('click', function() {
+        loadDataFromDB();
     });
 
     // Tri des colonnes
@@ -149,35 +102,47 @@ function displayData(data) {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
 
+    if (data.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="27" style="text-align: center; padding: 40px; color: #64748b;">
+                    <i class="fas fa-database" style="font-size: 48px; margin-bottom: 16px; display: block; opacity: 0.5;"></i>
+                    Aucune donnée trouvée
+                </td>
+            </tr>
+        `;
+        updateRowCount(0);
+        return;
+    }
+
     data.forEach(item => {
         const row = document.createElement('tr');
-        const score = parseInt(item.score_global);
         
         row.innerHTML = `
             <td>${item.id}</td>
             <td><strong>${item.entreprise_id}</strong></td>
             <td>${formatDate(item.date_analyse)}</td>
             <td>${item.periode}</td>
-            <td class="positive">${item.roe}</td>
-            <td class="positive">${item.netMargin}</td>
-            <td class="positive">${item.grossMargin}</td>
+            <td class="positive">${formatPercentage(item.roe)}</td>
+            <td class="positive">${formatPercentage(item.netmargin)}</td>
+            <td class="positive">${formatPercentage(item.grossmargin)}</td>
             <td><span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span></td>
             <td>${formatDateTime(item.created_at)}</td>
-            <td>${item.sgaMargin}</td>
-            <td>${item.debtToEquity}</td>
-            <td class="positive">${item.currentRatio}</td>
-            <td class="positive">${item.interestCoverage}</td>
-            <td>${item.peRatio}</td>
-            <td>${item.earningsYield}</td>
-            <td>${item.priceToFCF}</td>
-            <td>${item.priceToMM200}</td>
-            <td>${item.dividendYield}</td>
-            <td>${item.pbRatio}</td>
-            <td>${item.pegRatio}</td>
-            <td class="positive">${item.roic}</td>
-            <td class="positive">${item.freeCashFlow}</td>
-            <td>${item.evToEbitda}</td>
-            <td><span class="${getScoreClass(score)}">${item.score_global}</span></td>
+            <td>${formatPercentage(item.sgamargin)}</td>
+            <td>${formatNumber(item.debttoequity)}</td>
+            <td class="positive">${formatNumber(item.currentratio)}</td>
+            <td class="positive">${formatNumber(item.interestcoverage)}</td>
+            <td>${formatNumber(item.peratio)}</td>
+            <td>${formatPercentage(item.earningsyield)}</td>
+            <td>${formatNumber(item.pricetofcf)}</td>
+            <td>${formatNumber(item.pricetomm200)}</td>
+            <td>${formatPercentage(item.dividendyield)}</td>
+            <td>${formatNumber(item.pbratio)}</td>
+            <td>${formatNumber(item.pegratio)}</td>
+            <td class="positive">${formatPercentage(item.roic)}</td>
+            <td class="positive">${formatCurrency(item.freecashflow)}</td>
+            <td>${formatNumber(item.evtoebitda)}</td>
+            <td><span class="${getScoreClass(item.score_global)}">${item.score_global}/100</span></td>
             <td title="${item.points_forts}">${truncateText(item.points_forts, 40)}</td>
             <td title="${item.points_faibles}">${truncateText(item.points_faibles, 40)}</td>
         `;
@@ -185,24 +150,25 @@ function displayData(data) {
     });
 
     updateRowCount(data.length);
+    updateLastUpdate();
 }
 
 function filterData(searchTerm) {
     if (!searchTerm) {
-        currentData = [...sampleData];
-    } else {
-        const term = searchTerm.toLowerCase();
-        currentData = sampleData.filter(item => 
-            Object.values(item).some(value => 
-                value.toString().toLowerCase().includes(term)
-            )
-        );
+        displayData(currentData);
+        return;
     }
-    displayData(currentData);
+
+    const term = searchTerm.toLowerCase();
+    const filteredData = currentData.filter(item => 
+        Object.values(item).some(value => 
+            value !== null && value.toString().toLowerCase().includes(term)
+        )
+    );
+    displayData(filteredData);
 }
 
 function sortData(key) {
-    // Mettre à jour la configuration de tri
     if (sortConfig.key === key) {
         sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
     } else {
@@ -210,36 +176,56 @@ function sortData(key) {
         sortConfig.direction = 'asc';
     }
 
-    // Trier les données
-    currentData.sort((a, b) => {
+    const sortedData = [...currentData].sort((a, b) => {
         let aValue = a[key];
         let bValue = b[key];
 
-        // Conversion pour le tri numérique
-        if (['roe', 'netMargin', 'grossMargin', 'sgaMargin', 'earningsYield', 'dividendYield', 'roic'].includes(key)) {
-            aValue = parseFloat(aValue);
-            bValue = parseFloat(bValue);
-        } else if (key === 'score_global') {
-            aValue = parseInt(aValue);
-            bValue = parseInt(bValue);
-        } else if (['debtToEquity', 'currentRatio', 'interestCoverage', 'peRatio', 'priceToFCF', 'priceToMM200', 'pbRatio', 'pegRatio', 'evToEbitda'].includes(key)) {
-            aValue = parseFloat(aValue);
-            bValue = parseFloat(bValue);
-        } else if (key === 'date_analyse' || key === 'created_at') {
-            aValue = new Date(aValue);
-            bValue = new Date(bValue);
-        }
+        // Gestion des valeurs null
+        if (aValue === null) aValue = sortConfig.direction === 'asc' ? -Infinity : Infinity;
+        if (bValue === null) bValue = sortConfig.direction === 'asc' ? -Infinity : Infinity;
 
         if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
         if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
         return 0;
     });
 
-    displayData(currentData);
+    displayData(sortedData);
 }
 
 function updateRowCount(count) {
     document.getElementById('rowCount').textContent = count;
+}
+
+function updateLastUpdate() {
+    const now = new Date();
+    document.getElementById('lastUpdate').textContent = `Dernière mise à jour: ${now.toLocaleTimeString('fr-FR')}`;
+}
+
+function showLoading(show) {
+    const loading = document.getElementById('loading');
+    if (show) {
+        loading.classList.add('show');
+    } else {
+        loading.classList.remove('show');
+    }
+}
+
+function showError(message) {
+    // Supprimer les erreurs existantes
+    const existingError = document.querySelector('.error');
+    if (existingError) {
+        existingError.remove();
+    }
+
+    if (message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error';
+        errorDiv.innerHTML = `
+            <i class="fas fa-exclamation-triangle"></i>
+            ${message}
+        `;
+        document.querySelector('.main-content').prepend(errorDiv);
+    }
 }
 
 function getScoreClass(score) {
@@ -249,10 +235,12 @@ function getScoreClass(score) {
 }
 
 function formatDate(dateString) {
+    if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('fr-FR');
 }
 
 function formatDateTime(dateTimeString) {
+    if (!dateTimeString) return '-';
     return new Date(dateTimeString).toLocaleString('fr-FR', {
         day: '2-digit',
         month: '2-digit',
@@ -262,19 +250,37 @@ function formatDateTime(dateTimeString) {
     });
 }
 
+function formatPercentage(value) {
+    if (value === null || value === undefined) return '-';
+    return `${value}%`;
+}
+
+function formatNumber(value) {
+    if (value === null || value === undefined) return '-';
+    return value.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatCurrency(value) {
+    if (value === null || value === undefined) return '-';
+    if (value >= 1000000) {
+        return `€${(value / 1000000).toFixed(1)}M`;
+    } else if (value >= 1000) {
+        return `€${(value / 1000).toFixed(1)}K`;
+    }
+    return `€${value.toLocaleString('fr-FR')}`;
+}
+
 function truncateText(text, maxLength) {
+    if (!text) return '-';
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
 }
 
-// Fonctions utilitaires pour l'ajout de données
-window.addFinancialData = function(newData) {
-    sampleData.push(newData);
-    currentData.push(newData);
-    displayData(currentData);
-    return `Nouvelle donnée ajoutée. Total: ${sampleData.length} enregistrements`;
+// Fonctions utilitaires pour le développement
+window.getCurrentData = function() {
+    return currentData;
 };
 
-window.getFinancialData = function() {
-    return currentData;
+window.refreshData = function() {
+    loadDataFromDB();
 };
