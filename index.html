@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau d'Analyse Financière</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Tableau d'Analyse Financière</h1>
+        
+        <div class="controls">
+            <input type="text" id="globalSearch" placeholder="🔍 Recherche globale...">
+            <button id="resetFilters">Réinitialiser les filtres</button>
+        </div>
+        
+        <div class="scroll-info">💡 Utilisez le défilement horizontal pour voir toutes les colonnes</div>
+        
+        <div class="table-container">
+            <table id="financialTable">
+                <thead>
+                    <!-- En-têtes des colonnes -->
+                    <tr>
+                        <th>ID</th>
+                        <th>Entreprise</th>
+                        <th>Date Analyse</th>
+                        <th>Période</th>
+                        <th>ROE</th>
+                        <th>Marge Nette</th>
+                        <th>Marge Brute</th>
+                        <th>Recommandation</th>
+                        <th>Créé le</th>
+                        <th>Marge SGA</th>
+                        <th>Dette/Capitaux</th>
+                        <th>Ratio Courant</th>
+                        <th>Couverture Intérêts</th>
+                        <th>P/E Ratio</th>
+                        <th>Rendement</th>
+                        <th>Price/FCF</th>
+                        <th>Price/MM200</th>
+                        <th>Dividend Yield</th>
+                        <th>P/B Ratio</th>
+                        <th>PEG Ratio</th>
+                        <th>ROIC</th>
+                        <th>Free Cash Flow</th>
+                        <th>EV/EBITDA</th>
+                        <th>Score Global</th>
+                        <th>Points Forts</th>
+                        <th>Points Faibles</th>
+                    </tr>
+                    
+                    <!-- Filtres pour chaque colonne -->
+                    <tr class="filter-row">
+                        <th><input type="text" class="filter-input" data-column="0" placeholder="ID..."></th>
+                        <th><input type="text" class="filter-input" data-column="1" placeholder="Entreprise..."></th>
+                        <th><input type="text" class="filter-input" data-column="2" placeholder="Date..."></th>
+                        <th><input type="text" class="filter-input" data-column="3" placeholder="Période..."></th>
+                        <th><input type="text" class="filter-input" data-column="4" placeholder="ROE..."></th>
+                        <th><input type="text" class="filter-input" data-column="5" placeholder="Marge Nette..."></th>
+                        <th><input type="text" class="filter-input" data-column="6" placeholder="Marge Brute..."></th>
+                        <th><input type="text" class="filter-input" data-column="7" placeholder="Recommandation..."></th>
+                        <th><input type="text" class="filter-input" data-column="8" placeholder="Créé le..."></th>
+                        <th><input type="text" class="filter-input" data-column="9" placeholder="Marge SGA..."></th>
+                        <th><input type="text" class="filter-input" data-column="10" placeholder="Dette/Capitaux..."></th>
+                        <th><input type="text" class="filter-input" data-column="11" placeholder="Ratio Courant..."></th>
+                        <th><input type="text" class="filter-input" data-column="12" placeholder="Couverture..."></th>
+                        <th><input type="text" class="filter-input" data-column="13" placeholder="P/E..."></th>
+                        <th><input type="text" class="filter-input" data-column="14" placeholder="Rendement..."></th>
+                        <th><input type="text" class="filter-input" data-column="15" placeholder="Price/FCF..."></th>
+                        <th><input type="text" class="filter-input" data-column="16" placeholder="Price/MM200..."></th>
+                        <th><input type="text" class="filter-input" data-column="17" placeholder="Dividende..."></th>
+                        <th><input type="text" class="filter-input" data-column="18" placeholder="P/B..."></th>
+                        <th><input type="text" class="filter-input" data-column="19" placeholder="PEG..."></th>
+                        <th><input type="text" class="filter-input" data-column="20" placeholder="ROIC..."></th>
+                        <th><input type="text" class="filter-input" data-column="21" placeholder="FCF..."></th>
+                        <th><input type="text" class="filter-input" data-column="22" placeholder="EV/EBITDA..."></th>
+                        <th><input type="text" class="filter-input" data-column="23" placeholder="Score..."></th>
+                        <th><input type="text" class="filter-input" data-column="24" placeholder="Points forts..."></th>
+                        <th><input type="text" class="filter-input" data-column="25" placeholder="Points faibles..."></th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Les données seront insérées ici par JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="summary">
+            <span id="rowCount">0</span> résultats affichés
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
