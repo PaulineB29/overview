@@ -20,8 +20,17 @@
                     <i class="fas fa-refresh"></i>
                     Réinitialiser
                 </button>
+                <button id="refreshData" class="btn-refresh">
+                    <i class="fas fa-sync-alt"></i>
+                    Actualiser
+                </button>
             </div>
         </header>
+
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            Chargement des données...
+        </div>
 
         <main class="main-content">
             <div class="table-container">
@@ -33,7 +42,7 @@
                                 <i class="fas fa-sort"></i>
                             </th>
                             <th data-column="entreprise_id" class="sortable">
-                                <span>Entreprise</span>
+                                <span>Entreprise ID</span>
                                 <i class="fas fa-sort"></i>
                             </th>
                             <th data-column="date_analyse" class="sortable">
@@ -48,11 +57,11 @@
                                 <span>ROE</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="netMargin" class="sortable">
+                            <th data-column="netmargin" class="sortable">
                                 <span>Marge Nette</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="grossMargin" class="sortable">
+                            <th data-column="grossmargin" class="sortable">
                                 <span>Marge Brute</span>
                                 <i class="fas fa-sort"></i>
                             </th>
@@ -64,47 +73,47 @@
                                 <span>Créé le</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="sgaMargin" class="sortable">
+                            <th data-column="sgamargin" class="sortable">
                                 <span>Marge SGA</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="debtToEquity" class="sortable">
+                            <th data-column="debttoequity" class="sortable">
                                 <span>Dette/Capitaux</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="currentRatio" class="sortable">
+                            <th data-column="currentratio" class="sortable">
                                 <span>Ratio Courant</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="interestCoverage" class="sortable">
+                            <th data-column="interestcoverage" class="sortable">
                                 <span>Couverture Intérêts</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="peRatio" class="sortable">
+                            <th data-column="peratio" class="sortable">
                                 <span>P/E Ratio</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="earningsYield" class="sortable">
+                            <th data-column="earningsyield" class="sortable">
                                 <span>Rendement</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="priceToFCF" class="sortable">
+                            <th data-column="pricetofcf" class="sortable">
                                 <span>Price/FCF</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="priceToMM200" class="sortable">
+                            <th data-column="pricetomm200" class="sortable">
                                 <span>Price/MM200</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="dividendYield" class="sortable">
+                            <th data-column="dividendyield" class="sortable">
                                 <span>Dividend Yield</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="pbRatio" class="sortable">
+                            <th data-column="pbratio" class="sortable">
                                 <span>P/B Ratio</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="pegRatio" class="sortable">
+                            <th data-column="pegr" class="sortable">
                                 <span>PEG Ratio</span>
                                 <i class="fas fa-sort"></i>
                             </th>
@@ -112,11 +121,11 @@
                                 <span>ROIC</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="freeCashFlow" class="sortable">
+                            <th data-column="freecashflow" class="sortable">
                                 <span>Free Cash Flow</span>
                                 <i class="fas fa-sort"></i>
                             </th>
-                            <th data-column="evToEbitda" class="sortable">
+                            <th data-column="evtoebitda" class="sortable">
                                 <span>EV/EBITDA</span>
                                 <i class="fas fa-sort"></i>
                             </th>
@@ -135,13 +144,14 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- Les données seront chargées ici -->
+                        <!-- Les données seront chargées ici depuis la BDD -->
                     </tbody>
                 </table>
             </div>
             
             <div class="table-footer">
                 <span id="rowCount">0</span> résultats affichés
+                <span class="last-update" id="lastUpdate"></span>
             </div>
         </main>
     </div>
