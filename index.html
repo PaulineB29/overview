@@ -3,190 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyses Financières</title>
+    <title>Tableau d'Analyses Financières</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="app">
-        <!-- Header -->
+    <div class="container">
         <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-chart-line"></i>
-                    <h1>Analyses Financières</h1>
+            <h1><i class="fas fa-chart-line"></i> Analyses Financières</h1>
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="globalSearch" placeholder="Rechercher...">
                 </div>
-                <div class="header-actions">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="globalSearch" placeholder="Rechercher dans toutes les colonnes...">
-                    </div>
-                    <button class="btn-primary" id="resetFilters">
-                        <i class="fas fa-refresh"></i>
-                        Réinitialiser
-                    </button>
-                </div>
+                <button id="resetFilters" class="btn-reset">
+                    <i class="fas fa-refresh"></i>
+                    Réinitialiser
+                </button>
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="totalCompanies">4</span>
-                        <span class="stat-label">Entreprises</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon buy">
-                        <i class="fas fa-arrow-up"></i>
-                    </div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="buyRecommendations">3</span>
-                        <span class="stat-label">Achats</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon hold">
-                        <i class="fas fa-minus"></i>
-                    </div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="holdRecommendations">1</span>
-                        <span class="stat-label">Conserver</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="avgScore">77.5</span>
-                        <span class="stat-label">Score moyen</span>
-                    </div>
-                </div>
+            <div class="table-container">
+                <table id="financialTable">
+                    <thead>
+                        <tr>
+                            <th data-column="id" class="sortable">
+                                <span>ID</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="entreprise_id" class="sortable">
+                                <span>Entreprise</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="date_analyse" class="sortable">
+                                <span>Date Analyse</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="periode" class="sortable">
+                                <span>Période</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="roe" class="sortable">
+                                <span>ROE</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="netMargin" class="sortable">
+                                <span>Marge Nette</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="grossMargin" class="sortable">
+                                <span>Marge Brute</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="recommandation" class="sortable">
+                                <span>Recommandation</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="created_at" class="sortable">
+                                <span>Créé le</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="sgaMargin" class="sortable">
+                                <span>Marge SGA</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="debtToEquity" class="sortable">
+                                <span>Dette/Capitaux</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="currentRatio" class="sortable">
+                                <span>Ratio Courant</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="interestCoverage" class="sortable">
+                                <span>Couverture Intérêts</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="peRatio" class="sortable">
+                                <span>P/E Ratio</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="earningsYield" class="sortable">
+                                <span>Rendement</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="priceToFCF" class="sortable">
+                                <span>Price/FCF</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="priceToMM200" class="sortable">
+                                <span>Price/MM200</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="dividendYield" class="sortable">
+                                <span>Dividend Yield</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="pbRatio" class="sortable">
+                                <span>P/B Ratio</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="pegRatio" class="sortable">
+                                <span>PEG Ratio</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="roic" class="sortable">
+                                <span>ROIC</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="freeCashFlow" class="sortable">
+                                <span>Free Cash Flow</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="evToEbitda" class="sortable">
+                                <span>EV/EBITDA</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="score_global" class="sortable">
+                                <span>Score Global</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="points_forts" class="sortable">
+                                <span>Points Forts</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th data-column="points_faibles" class="sortable">
+                                <span>Points Faibles</span>
+                                <i class="fas fa-sort"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Les données seront chargées ici -->
+                    </tbody>
+                </table>
             </div>
-
-            <!-- Table Container -->
-            <div class="table-section">
-                <div class="section-header">
-                    <h2>Détails des analyses financières</h2>
-                    <div class="table-info">
-                        <span class="results-count" id="rowCount">4 résultats</span>
-                        <div class="view-options">
-                            <button class="view-option active" data-view="table">
-                                <i class="fas fa-table"></i>
-                                Tableau
-                            </button>
-                            <button class="view-option" data-view="cards">
-                                <i class="fas fa-th-large"></i>
-                                Cartes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filtres par colonne -->
-                <div class="column-filters" id="columnFilters">
-                    <div class="filters-row">
-                        <input type="text" class="column-filter" data-column="id" placeholder="ID...">
-                        <input type="text" class="column-filter" data-column="entreprise_id" placeholder="Entreprise ID...">
-                        <input type="text" class="column-filter" data-column="date_analyse" placeholder="Date analyse...">
-                        <input type="text" class="column-filter" data-column="periode" placeholder="Période...">
-                        <input type="text" class="column-filter" data-column="roe" placeholder="ROE...">
-                        <input type="text" class="column-filter" data-column="netMargin" placeholder="Marge nette...">
-                        <input type="text" class="column-filter" data-column="grossMargin" placeholder="Marge brute...">
-                        <input type="text" class="column-filter" data-column="recommandation" placeholder="Recommandation...">
-                        <input type="text" class="column-filter" data-column="created_at" placeholder="Créé le...">
-                        <input type="text" class="column-filter" data-column="sgaMargin" placeholder="Marge SGA...">
-                        <input type="text" class="column-filter" data-column="debtToEquity" placeholder="Dette/Capitaux...">
-                        <input type="text" class="column-filter" data-column="currentRatio" placeholder="Ratio courant...">
-                        <input type="text" class="column-filter" data-column="interestCoverage" placeholder="Couverture intérêts...">
-                        <input type="text" class="column-filter" data-column="peRatio" placeholder="P/E Ratio...">
-                        <input type="text" class="column-filter" data-column="earningsYield" placeholder="Rendement...">
-                        <input type="text" class="column-filter" data-column="priceToFCF" placeholder="Price/FCF...">
-                        <input type="text" class="column-filter" data-column="priceToMM200" placeholder="Price/MM200...">
-                        <input type="text" class="column-filter" data-column="dividendYield" placeholder="Dividende...">
-                        <input type="text" class="column-filter" data-column="pbRatio" placeholder="P/B Ratio...">
-                        <input type="text" class="column-filter" data-column="pegRatio" placeholder="PEG Ratio...">
-                        <input type="text" class="column-filter" data-column="roic" placeholder="ROIC...">
-                        <input type="text" class="column-filter" data-column="freeCashFlow" placeholder="Free Cash Flow...">
-                        <input type="text" class="column-filter" data-column="evToEbitda" placeholder="EV/EBITDA...">
-                        <input type="text" class="column-filter" data-column="score_global" placeholder="Score global...">
-                        <input type="text" class="column-filter" data-column="points_forts" placeholder="Points forts...">
-                        <input type="text" class="column-filter" data-column="points_faibles" placeholder="Points faibles...">
-                    </div>
-                </div>
-
-                <!-- Table View -->
-                <div class="table-container" id="tableView">
-                    <div class="table-wrapper">
-                        <table id="financialTable">
-                            <thead>
-                                <tr>
-                                    <th data-column="id" class="sortable">ID</th>
-                                    <th data-column="entreprise_id" class="sortable">Entreprise ID</th>
-                                    <th data-column="date_analyse" class="sortable">Date Analyse</th>
-                                    <th data-column="periode" class="sortable">Période</th>
-                                    <th data-column="roe" class="sortable">ROE</th>
-                                    <th data-column="netMargin" class="sortable">Marge Nette</th>
-                                    <th data-column="grossMargin" class="sortable">Marge Brute</th>
-                                    <th data-column="recommandation" class="sortable">Recommandation</th>
-                                    <th data-column="created_at" class="sortable">Créé le</th>
-                                    <th data-column="sgaMargin" class="sortable">Marge SGA</th>
-                                    <th data-column="debtToEquity" class="sortable">Dette/Capitaux</th>
-                                    <th data-column="currentRatio" class="sortable">Ratio Courant</th>
-                                    <th data-column="interestCoverage" class="sortable">Couverture Intérêts</th>
-                                    <th data-column="peRatio" class="sortable">P/E Ratio</th>
-                                    <th data-column="earningsYield" class="sortable">Rendement</th>
-                                    <th data-column="priceToFCF" class="sortable">Price/FCF</th>
-                                    <th data-column="priceToMM200" class="sortable">Price/MM200</th>
-                                    <th data-column="dividendYield" class="sortable">Dividend Yield</th>
-                                    <th data-column="pbRatio" class="sortable">P/B Ratio</th>
-                                    <th data-column="pegRatio" class="sortable">PEG Ratio</th>
-                                    <th data-column="roic" class="sortable">ROIC</th>
-                                    <th data-column="freeCashFlow" class="sortable">Free Cash Flow</th>
-                                    <th data-column="evToEbitda" class="sortable">EV/EBITDA</th>
-                                    <th data-column="score_global" class="sortable">Score Global</th>
-                                    <th data-column="points_forts">Points Forts</th>
-                                    <th data-column="points_faibles">Points Faibles</th>
-                                    <th class="actions">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                                <!-- Données chargées via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Cards View (Hidden by default) -->
-                <div class="cards-container hidden" id="cardsView">
-                    <div class="cards-grid" id="cardsBody">
-                        <!-- Cartes chargées via JavaScript -->
-                    </div>
-                </div>
+            
+            <div class="table-footer">
+                <span id="rowCount">0</span> résultats affichés
             </div>
         </main>
-    </div>
-
-    <!-- Modal pour détails -->
-    <div class="modal hidden" id="detailModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Détails de l'analyse</h3>
-                <button class="modal-close" id="modalClose">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Contenu chargé via JavaScript -->
-            </div>
-        </div>
     </div>
 
     <script src="script.js"></script>
