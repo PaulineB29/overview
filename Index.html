@@ -5,64 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau d'Analyse Financière</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
+            background-color: #f5f7fa;
+            color: #333;
         }
         
         .container {
             max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
             overflow-x: auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
+            min-width: 2000px;
         }
         
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid #e1e1e1;
+            padding: 10px 8px;
             text-align: left;
             font-size: 12px;
+            white-space: nowrap;
         }
         
         th {
-            background-color: #f2f2f2;
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
             position: sticky;
             top: 0;
         }
         
-        .filter-input {
-            width: 100%;
-            padding: 4px;
-            box-sizing: border-box;
-            font-size: 11px;
+        .filter-row th {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            padding: 5px;
         }
         
-        .header-row {
-            background-color: #e8f4f8;
+        .filter-input {
+            width: 100%;
+            padding: 6px 4px;
+            box-sizing: border-box;
+            font-size: 11px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        .filter-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 3px rgba(52, 152, 219, 0.3);
         }
         
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #f8f9fa;
         }
         
         tr:hover {
-            background-color: #f0f0f0;
+            background-color: #e8f4f8;
+            transition: background-color 0.2s;
+        }
+        
+        .status-buy {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .status-hold {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .status-sell {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .positive {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .negative {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .scroll-info {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 10px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <h1>Tableau d'Analyse Financière</h1>
-    
     <div class="container">
+        <h1>📊 Tableau d'Analyse Financière</h1>
+        
+        <div class="scroll-info">💡 Utilisez le défilement horizontal pour voir toutes les colonnes</div>
+        
         <table id="financialTable">
             <thead>
-                <tr class="header-row">
+                <!-- En-têtes des colonnes -->
+                <tr>
                     <th>ID</th>
-                    <th>Entreprise ID</th>
+                    <th>Entreprise</th>
                     <th>Date Analyse</th>
                     <th>Période</th>
                     <th>ROE</th>
@@ -88,34 +169,35 @@
                     <th>Points Forts</th>
                     <th>Points Faibles</th>
                 </tr>
-                <tr>
-                    <!-- Filtres pour chaque colonne -->
-                    <th><input type="text" class="filter-input" data-column="0" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="1" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="2" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="3" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="4" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="5" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="6" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="7" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="8" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="9" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="10" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="11" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="12" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="13" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="14" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="15" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="16" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="17" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="18" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="19" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="20" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="21" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="22" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="23" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="24" placeholder="Filtrer..."></th>
-                    <th><input type="text" class="filter-input" data-column="25" placeholder="Filtrer..."></th>
+                
+                <!-- Filtres pour chaque colonne -->
+                <tr class="filter-row">
+                    <th><input type="text" class="filter-input" data-column="0" placeholder="ID..."></th>
+                    <th><input type="text" class="filter-input" data-column="1" placeholder="Entreprise..."></th>
+                    <th><input type="text" class="filter-input" data-column="2" placeholder="Date..."></th>
+                    <th><input type="text" class="filter-input" data-column="3" placeholder="Période..."></th>
+                    <th><input type="text" class="filter-input" data-column="4" placeholder="ROE..."></th>
+                    <th><input type="text" class="filter-input" data-column="5" placeholder="Marge Nette..."></th>
+                    <th><input type="text" class="filter-input" data-column="6" placeholder="Marge Brute..."></th>
+                    <th><input type="text" class="filter-input" data-column="7" placeholder="Recommandation..."></th>
+                    <th><input type="text" class="filter-input" data-column="8" placeholder="Créé le..."></th>
+                    <th><input type="text" class="filter-input" data-column="9" placeholder="Marge SGA..."></th>
+                    <th><input type="text" class="filter-input" data-column="10" placeholder="Dette/Capitaux..."></th>
+                    <th><input type="text" class="filter-input" data-column="11" placeholder="Ratio Courant..."></th>
+                    <th><input type="text" class="filter-input" data-column="12" placeholder="Couverture..."></th>
+                    <th><input type="text" class="filter-input" data-column="13" placeholder="P/E..."></th>
+                    <th><input type="text" class="filter-input" data-column="14" placeholder="Rendement..."></th>
+                    <th><input type="text" class="filter-input" data-column="15" placeholder="Price/FCF..."></th>
+                    <th><input type="text" class="filter-input" data-column="16" placeholder="Price/MM200..."></th>
+                    <th><input type="text" class="filter-input" data-column="17" placeholder="Dividende..."></th>
+                    <th><input type="text" class="filter-input" data-column="18" placeholder="P/B..."></th>
+                    <th><input type="text" class="filter-input" data-column="19" placeholder="PEG..."></th>
+                    <th><input type="text" class="filter-input" data-column="20" placeholder="ROIC..."></th>
+                    <th><input type="text" class="filter-input" data-column="21" placeholder="FCF..."></th>
+                    <th><input type="text" class="filter-input" data-column="22" placeholder="EV/EBITDA..."></th>
+                    <th><input type="text" class="filter-input" data-column="23" placeholder="Score..."></th>
+                    <th><input type="text" class="filter-input" data-column="24" placeholder="Points forts..."></th>
+                    <th><input type="text" class="filter-input" data-column="25" placeholder="Points faibles..."></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -125,11 +207,11 @@
     </div>
 
     <script>
-        // Données d'exemple
+        // Données d'exemple plus réalistes
         const sampleData = [
             {
                 id: 1,
-                entreprise_id: "ENT001",
+                entreprise_id: "AAPL",
                 date_analyse: "2024-01-15",
                 periode: "T4 2023",
                 roe: "15.2%",
@@ -149,7 +231,7 @@
                 pbRatio: "2.1",
                 pegRatio: "1.2",
                 roic: "12.8%",
-                freeCashFlow: "125000000",
+                freeCashFlow: "125M",
                 evToEbitda: "10.5",
                 score_global: "78/100",
                 points_forts: "Croissance stable, Dividende fiable",
@@ -157,7 +239,7 @@
             },
             {
                 id: 2,
-                entreprise_id: "ENT002",
+                entreprise_id: "MSFT",
                 date_analyse: "2024-01-14",
                 periode: "T4 2023",
                 roe: "8.7%",
@@ -177,13 +259,40 @@
                 pbRatio: "1.8",
                 pegRatio: "1.8",
                 roic: "9.2%",
-                freeCashFlow: "89000000",
+                freeCashFlow: "89M",
                 evToEbitda: "12.8",
                 score_global: "65/100",
-                points_forts: "Position marché forte",
-                points_faibles: "Marge en baisse"
+                points_forts: "Position marché forte, Innovation",
+                points_faibles: "Marge en baisse, Régulation"
+            },
+            {
+                id: 3,
+                entreprise_id: "TSLA",
+                date_analyse: "2024-01-13",
+                periode: "T4 2023",
+                roe: "22.1%",
+                netMargin: "15.8%",
+                grossMargin: "28.4%",
+                recommandation: "Acheter",
+                created_at: "2024-01-14 09:15:00",
+                sgaMargin: "15.3%",
+                debtToEquity: "0.32",
+                currentRatio: "3.2",
+                interestCoverage: "12.5",
+                peRatio: "45.2",
+                earningsYield: "2.2%",
+                priceToFCF: "28.4",
+                priceToMM200: "1.25",
+                dividendYield: "0.0%",
+                pbRatio: "8.5",
+                pegRatio: "2.1",
+                roic: "18.7%",
+                freeCashFlow: "156M",
+                evToEbitda: "35.2",
+                score_global: "82/100",
+                points_forts: "Innovation, Croissance rapide",
+                points_faibles: "Volatilité, Concurrence EVs"
             }
-            // Ajoutez plus de données d'exemple ici...
         ];
 
         // Fonction pour afficher les données dans le tableau
@@ -194,20 +303,30 @@
             data.forEach(item => {
                 const row = document.createElement('tr');
                 
+                // Déterminer la classe CSS pour la recommandation
+                let recommandationClass = '';
+                if (item.recommandation.toLowerCase().includes('acheter')) {
+                    recommandationClass = 'status-buy';
+                } else if (item.recommandation.toLowerCase().includes('conserver')) {
+                    recommandationClass = 'status-hold';
+                } else if (item.recommandation.toLowerCase().includes('vendre')) {
+                    recommandationClass = 'status-sell';
+                }
+                
                 row.innerHTML = `
                     <td>${item.id}</td>
-                    <td>${item.entreprise_id}</td>
+                    <td><strong>${item.entreprise_id}</strong></td>
                     <td>${item.date_analyse}</td>
                     <td>${item.periode}</td>
-                    <td>${item.roe}</td>
-                    <td>${item.netMargin}</td>
-                    <td>${item.grossMargin}</td>
-                    <td>${item.recommandation}</td>
+                    <td class="positive">${item.roe}</td>
+                    <td class="positive">${item.netMargin}</td>
+                    <td class="positive">${item.grossMargin}</td>
+                    <td><span class="${recommandationClass}">${item.recommandation}</span></td>
                     <td>${item.created_at}</td>
                     <td>${item.sgaMargin}</td>
                     <td>${item.debtToEquity}</td>
-                    <td>${item.currentRatio}</td>
-                    <td>${item.interestCoverage}</td>
+                    <td class="positive">${item.currentRatio}</td>
+                    <td class="positive">${item.interestCoverage}</td>
                     <td>${item.peRatio}</td>
                     <td>${item.earningsYield}</td>
                     <td>${item.priceToFCF}</td>
@@ -215,10 +334,10 @@
                     <td>${item.dividendYield}</td>
                     <td>${item.pbRatio}</td>
                     <td>${item.pegRatio}</td>
-                    <td>${item.roic}</td>
-                    <td>${item.freeCashFlow}</td>
+                    <td class="positive">${item.roic}</td>
+                    <td class="positive">${item.freeCashFlow}</td>
                     <td>${item.evToEbitda}</td>
-                    <td>${item.score_global}</td>
+                    <td><strong>${item.score_global}</strong></td>
                     <td>${item.points_forts}</td>
                     <td>${item.points_faibles}</td>
                 `;
@@ -237,6 +356,7 @@
                     const filterValue = this.value.toLowerCase();
                     
                     const rows = document.querySelectorAll('#tableBody tr');
+                    let visibleRows = 0;
                     
                     rows.forEach(row => {
                         const cell = row.cells[columnIndex];
@@ -244,6 +364,7 @@
                             const cellValue = cell.textContent.toLowerCase();
                             if (cellValue.includes(filterValue)) {
                                 row.style.display = '';
+                                visibleRows++;
                             } else {
                                 row.style.display = 'none';
                             }
@@ -257,13 +378,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             displayData(sampleData);
             setupFilters();
+            
+            console.log('Tableau financier initialisé avec succès!');
+            console.log(`${sampleData.length} enregistrements chargés`);
         });
 
-        // Fonction pour ajouter de nouvelles données (utile pour l'intégration future)
-        function addData(newData) {
+        // Fonction utilitaire pour ajouter de nouvelles données
+        window.addFinancialData = function(newData) {
             sampleData.push(newData);
             displayData(sampleData);
-        }
+            return `Nouvelle donnée ajoutée. Total: ${sampleData.length} enregistrements`;
+        };
     </script>
 </body>
 </html>
