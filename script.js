@@ -1,4 +1,4 @@
-// Données d'exemple
+// Données d'exemple complètes avec toutes les colonnes
 const sampleData = [
     {
         id: 1,
@@ -118,6 +118,7 @@ const sampleData = [
 let currentData = [...sampleData];
 let sortConfig = { key: null, direction: 'asc' };
 let currentView = 'table';
+let columnFilters = {};
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
@@ -133,13 +134,30 @@ function initializeApp() {
 function setupEventListeners() {
     // Recherche globale
     document.getElementById('globalSearch').addEventListener('input', function(e) {
-        filterData(e.target.value);
+        filterGlobalData(e.target.value);
+    });
+
+    // Filtres par colonne
+    document.querySelectorAll('.column-filter').forEach(filter => {
+        filter.addEventListener('input', function(e) {
+            const columnName = this.dataset.column;
+            if (e.target.value) {
+                columnFilters[columnName] = e.target.value.toLowerCase();
+            } else {
+                delete columnFilters[columnName];
+            }
+            applyFilters();
+        });
     });
 
     // Réinitialisation
     document.getElementById('resetFilters').addEventListener('click', function() {
         document.getElementById('globalSearch').value = '';
+        document.querySelectorAll('.column-filter').forEach(filter => {
+            filter.value = '';
+        });
         currentData = [...sampleData];
+        columnFilters = {};
         displayData(currentData);
         updateStats();
     });
@@ -199,25 +217,34 @@ function displayTableView(data) {
         const score = parseInt(item.score_global);
         
         row.innerHTML = `
-            <td>
-                <div style="font-weight: 600;">${item.entreprise_id}</div>
-                <div style="font-size: 0.75rem; color: #64748b;">${item.periode}</div>
-            </td>
-            <td>
-                <span class="score ${getScoreClass(score)}">${item.score_global}</span>
-            </td>
-            <td>
-                <span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span>
-            </td>
+            <td>${item.id}</td>
+            <td><strong>${item.entreprise_id}</strong></td>
+            <td>${formatDate(item.date_analyse)}</td>
+            <td>${item.periode}</td>
             <td class="text-positive">${item.roe}</td>
             <td class="text-positive">${item.netMargin}</td>
+            <td class="text-positive">${item.grossMargin}</td>
+            <td><span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span></td>
+            <td>${formatDateTime(item.created_at)}</td>
+            <td>${item.sgaMargin}</td>
+            <td>${item.debtToEquity}</td>
+            <td class="text-positive">${item.currentRatio}</td>
+            <td class="text-positive">${item.interestCoverage}</td>
             <td>${item.peRatio}</td>
+            <td>${item.earningsYield}</td>
+            <td>${item.priceToFCF}</td>
+            <td>${item.priceToMM200}</td>
+            <td>${item.dividendYield}</td>
+            <td>${item.pbRatio}</td>
+            <td>${item.pegRatio}</td>
+            <td class="text-positive">${item.roic}</td>
             <td class="text-positive">${item.freeCashFlow}</td>
+            <td>${item.evToEbitda}</td>
+            <td><span class="score ${getScoreClass(score)}">${item.score_global}</span></td>
+            <td class="text-neutral">${truncateText(item.points_forts, 30)}</td>
+            <td class="text-neutral">${truncateText(item.points_faibles, 30)}</td>
             <td>
-                <div style="font-size: 0.75rem;">${formatDate(item.date_analyse)}</div>
-            </td>
-            <td>
-                <button class="btn-icon" onclick="showDetails(${item.id})" title="Voir les détails">
+                <button class="btn-icon secondary" onclick="showDetails(${item.id})" title="Voir les détails">
                     <i class="fas fa-eye"></i>
                 </button>
             </td>
@@ -247,7 +274,7 @@ function displayCardsView(data) {
             </div>
             
             <div class="card-score">
-                <span class="score ${getScoreClass(score)}">${item.score_global}</span>
+                <span class="score ${getScoreClass(score)}">Score: ${item.score_global}</span>
             </div>
             
             <div class="card-stats">
@@ -267,18 +294,26 @@ function displayCardsView(data) {
                     <span class="stat-value text-positive">${item.freeCashFlow}</span>
                     <span class="stat-label">Free Cash Flow</span>
                 </div>
+                <div class="stat">
+                    <span class="stat-value">${item.debtToEquity}</span>
+                    <span class="stat-label">Dette/Capitaux</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value text-positive">${item.roic}</span>
+                    <span class="stat-label">ROIC</span>
+                </div>
             </div>
             
             <div class="card-summary">
-                <div style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.5rem;">
-                    ${item.points_forts.split(',')[0]}...
+                <div style="font-size: 0.875rem; color: #64748b;">
+                    <strong>Points forts:</strong> ${truncateText(item.points_forts, 80)}
                 </div>
             </div>
             
             <div class="card-actions">
                 <button class="btn-icon" onclick="showDetails(${item.id})">
                     <i class="fas fa-chart-bar"></i>
-                    Détails
+                    Voir détails complets
                 </button>
             </div>
         `;
@@ -286,7 +321,7 @@ function displayCardsView(data) {
     });
 }
 
-function filterData(searchTerm) {
+function filterGlobalData(searchTerm) {
     if (!searchTerm) {
         currentData = [...sampleData];
     } else {
@@ -297,6 +332,34 @@ function filterData(searchTerm) {
             )
         );
     }
+    applyFilters();
+}
+
+function applyFilters() {
+    let filteredData = [...sampleData];
+
+    // Appliquer la recherche globale
+    const globalSearch = document.getElementById('globalSearch').value.toLowerCase();
+    if (globalSearch) {
+        filteredData = filteredData.filter(item => 
+            Object.values(item).some(value => 
+                value.toString().toLowerCase().includes(globalSearch)
+            )
+        );
+    }
+
+    // Appliquer les filtres par colonne
+    Object.keys(columnFilters).forEach(columnName => {
+        const filterValue = columnFilters[columnName];
+        if (filterValue) {
+            filteredData = filteredData.filter(item => {
+                const cellValue = item[columnName]?.toString().toLowerCase() || '';
+                return cellValue.includes(filterValue);
+            });
+        }
+    });
+
+    currentData = filteredData;
     displayData(currentData);
     updateStats();
 }
@@ -314,9 +377,15 @@ function sortData(key) {
         let bValue = b[key];
 
         // Conversion pour le tri numérique
-        if (key === 'score') {
-            aValue = parseInt(a.score_global);
-            bValue = parseInt(b.score_global);
+        if (['roe', 'netMargin', 'grossMargin', 'sgaMargin', 'earningsYield', 'dividendYield', 'roic'].includes(key)) {
+            aValue = parseFloat(aValue);
+            bValue = parseFloat(bValue);
+        } else if (key === 'score_global') {
+            aValue = parseInt(aValue);
+            bValue = parseInt(bValue);
+        } else if (['debtToEquity', 'currentRatio', 'interestCoverage', 'peRatio', 'priceToFCF', 'priceToMM200', 'pbRatio', 'pegRatio', 'evToEbitda'].includes(key)) {
+            aValue = parseFloat(aValue);
+            bValue = parseFloat(bValue);
         }
 
         if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -331,25 +400,31 @@ function showDetails(id) {
     const item = sampleData.find(d => d.id === id);
     if (!item) return;
 
-    document.getElementById('modalTitle').textContent = `Analyse ${item.entreprise_id}`;
+    document.getElementById('modalTitle').textContent = `Analyse détaillée - ${item.entreprise_id}`;
     
     const modalBody = document.getElementById('modalBody');
     modalBody.innerHTML = `
-        <div style="display: grid; gap: 1.5rem;">
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+        <div style="display: grid; gap: 2rem;">
+            <!-- En-tête -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; background: #f8fafc; padding: 1.5rem; border-radius: 0.5rem;">
                 <div class="stat">
                     <span class="stat-label">Score Global</span>
-                    <span class="stat-value">${item.score_global}</span>
+                    <span class="stat-value" style="font-size: 1.5rem;">${item.score_global}</span>
                 </div>
                 <div class="stat">
                     <span class="stat-label">Recommandation</span>
-                    <span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span>
+                    <span class="badge ${item.recommandation.toLowerCase()}" style="font-size: 1rem;">${item.recommandation}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Période</span>
+                    <span class="stat-value">${item.periode}</span>
                 </div>
             </div>
 
+            <!-- Rentabilité -->
             <div>
-                <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">INDICATEURS CLÉS</h4>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <h4 style="margin-bottom: 1rem; font-size: 1rem; color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">RENTABILITÉ</h4>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
                     <div class="stat">
                         <span class="stat-label">ROE</span>
                         <span class="stat-value text-positive">${item.roe}</span>
@@ -359,23 +434,75 @@ function showDetails(id) {
                         <span class="stat-value text-positive">${item.netMargin}</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">P/E Ratio</span>
-                        <span class="stat-value">${item.peRatio}</span>
+                        <span class="stat-label">Marge Brute</span>
+                        <span class="stat-value text-positive">${item.grossMargin}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">ROIC</span>
+                        <span class="stat-value text-positive">${item.roic}</span>
                     </div>
                 </div>
             </div>
 
+            <!-- Valorisation -->
             <div>
-                <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">POINTS FORTS</h4>
-                <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #0ea5e9;">
-                    <div style="font-size: 0.875rem; color: #0369a1;">${item.points_forts}</div>
+                <h4 style="margin-bottom: 1rem; font-size: 1rem; color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">VALORISATION</h4>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                    <div class="stat">
+                        <span class="stat-label">P/E Ratio</span>
+                        <span class="stat-value">${item.peRatio}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">P/B Ratio</span>
+                        <span class="stat-value">${item.pbRatio}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">PEG Ratio</span>
+                        <span class="stat-value">${item.pegRatio}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">EV/EBITDA</span>
+                        <span class="stat-value">${item.evToEbitda}</span>
+                    </div>
                 </div>
             </div>
 
+            <!-- Santé financière -->
             <div>
-                <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">POINTS FAIBLES</h4>
-                <div style="background: #fef2f2; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #ef4444;">
-                    <div style="font-size: 0.875rem; color: #dc2626;">${item.points_faibles}</div>
+                <h4 style="margin-bottom: 1rem; font-size: 1rem; color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">SANTÉ FINANCIÈRE</h4>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                    <div class="stat">
+                        <span class="stat-label">Dette/Capitaux</span>
+                        <span class="stat-value">${item.debtToEquity}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Ratio Courant</span>
+                        <span class="stat-value text-positive">${item.currentRatio}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Couverture Intérêts</span>
+                        <span class="stat-value text-positive">${item.interestCoverage}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Free Cash Flow</span>
+                        <span class="stat-value text-positive">${item.freeCashFlow}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Points forts et faibles -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div>
+                    <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">POINTS FORTS</h4>
+                    <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #0ea5e9;">
+                        <div style="font-size: 0.875rem; color: #0369a1;">${item.points_forts}</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">POINTS FAIBLES</h4>
+                    <div style="background: #fef2f2; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #ef4444;">
+                        <div style="font-size: 0.875rem; color: #dc2626;">${item.points_faibles}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -416,6 +543,15 @@ function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('fr-FR');
 }
 
+function formatDateTime(dateTimeString) {
+    return new Date(dateTimeString).toLocaleString('fr-FR');
+}
+
+function truncateText(text, maxLength) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+}
+
 // Export pour la console
 window.addFinancialData = function(newData) {
     sampleData.push(newData);
@@ -423,4 +559,8 @@ window.addFinancialData = function(newData) {
     displayData(currentData);
     updateStats();
     return `Nouvelle donnée ajoutée. Total: ${sampleData.length} enregistrements`;
+};
+
+window.getFinancialData = function() {
+    return currentData;
 };
