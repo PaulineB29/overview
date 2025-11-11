@@ -25,8 +25,8 @@ const sampleData = [
         freeCashFlow: "125M",
         evToEbitda: "10.5",
         score_global: "78/100",
-        points_forts: "Croissance stable, Dividende fiable",
-        points_faibles: "Dette élevée, Concurrence forte"
+        points_forts: "Croissance stable, Dividende fiable, Trésorerie solide",
+        points_faibles: "Dette élevée, Concurrence forte dans le secteur tech"
     },
     {
         id: 2,
@@ -53,8 +53,8 @@ const sampleData = [
         freeCashFlow: "89M",
         evToEbitda: "12.8",
         score_global: "65/100",
-        points_forts: "Position marché forte, Innovation",
-        points_faibles: "Marge en baisse, Régulation"
+        points_forts: "Position marché forte, Innovation cloud, Diversification",
+        points_faibles: "Marge en baisse, Pressions réglementaires croissantes"
     },
     {
         id: 3,
@@ -81,8 +81,8 @@ const sampleData = [
         freeCashFlow: "156M",
         evToEbitda: "35.2",
         score_global: "82/100",
-        points_forts: "Innovation, Croissance rapide",
-        points_faibles: "Volatilité, Concurrence EVs"
+        points_forts: "Innovation technologique, Croissance rapide, Leadership EVs",
+        points_faibles: "Volatilité élevée, Concurrence accrue dans les véhicules électriques"
     },
     {
         id: 4,
@@ -109,184 +109,318 @@ const sampleData = [
         freeCashFlow: "89M",
         evToEbitda: "18.4",
         score_global: "85/100",
-        points_forts: "Dominance marché, Trésorerie solide",
-        points_faibles: "Régulation, Dépendance publicité"
+        points_forts: "Dominance du marché publicitaire, Trésorerie solide, Données massives",
+        points_faibles: "Régulation antitrust, Dépendance à la publicité, Concurrence cloud"
     }
 ];
 
-// Variables globales
+// État global
 let currentData = [...sampleData];
-let activeFilters = {};
-
-// Fonction pour afficher les données dans le tableau
-function displayData(data) {
-    const tableBody = document.getElementById('tableBody');
-    tableBody.innerHTML = '';
-
-    data.forEach(item => {
-        const row = document.createElement('tr');
-        
-        // Déterminer la classe CSS pour la recommandation
-        let recommandationClass = '';
-        if (item.recommandation.toLowerCase().includes('acheter')) {
-            recommandationClass = 'status-buy';
-        } else if (item.recommandation.toLowerCase().includes('conserver')) {
-            recommandationClass = 'status-hold';
-        } else if (item.recommandation.toLowerCase().includes('vendre')) {
-            recommandationClass = 'status-sell';
-        }
-        
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td><strong>${item.entreprise_id}</strong></td>
-            <td>${item.date_analyse}</td>
-            <td>${item.periode}</td>
-            <td class="positive">${item.roe}</td>
-            <td class="positive">${item.netMargin}</td>
-            <td class="positive">${item.grossMargin}</td>
-            <td><span class="${recommandationClass}">${item.recommandation}</span></td>
-            <td>${item.created_at}</td>
-            <td>${item.sgaMargin}</td>
-            <td>${item.debtToEquity}</td>
-            <td class="positive">${item.currentRatio}</td>
-            <td class="positive">${item.interestCoverage}</td>
-            <td>${item.peRatio}</td>
-            <td>${item.earningsYield}</td>
-            <td>${item.priceToFCF}</td>
-            <td>${item.priceToMM200}</td>
-            <td>${item.dividendYield}</td>
-            <td>${item.pbRatio}</td>
-            <td>${item.pegRatio}</td>
-            <td class="positive">${item.roic}</td>
-            <td class="positive">${item.freeCashFlow}</td>
-            <td>${item.evToEbitda}</td>
-            <td><strong>${item.score_global}</strong></td>
-            <td>${item.points_forts}</td>
-            <td>${item.points_faibles}</td>
-        `;
-        
-        tableBody.appendChild(row);
-    });
-
-    // Mettre à jour le compteur
-    updateRowCount(data.length);
-}
-
-// Fonction pour mettre à jour le compteur de résultats
-function updateRowCount(count) {
-    document.getElementById('rowCount').textContent = count;
-}
-
-// Fonction de filtrage par colonne
-function setupColumnFilters() {
-    const filterInputs = document.querySelectorAll('.filter-input');
-    
-    filterInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            const columnIndex = parseInt(this.getAttribute('data-column'));
-            const filterValue = this.value.toLowerCase();
-            
-            // Stocker le filtre
-            if (filterValue) {
-                activeFilters[columnIndex] = filterValue;
-            } else {
-                delete activeFilters[columnIndex];
-            }
-            
-            applyFilters();
-        });
-    });
-}
-
-// Fonction de recherche globale
-function setupGlobalSearch() {
-    const globalSearch = document.getElementById('globalSearch');
-    
-    globalSearch.addEventListener('input', function() {
-        const searchValue = this.value.toLowerCase();
-        
-        if (searchValue) {
-            activeFilters.global = searchValue;
-        } else {
-            delete activeFilters.global;
-        }
-        
-        applyFilters();
-    });
-}
-
-// Fonction pour appliquer tous les filtres
-function applyFilters() {
-    let filteredData = [...sampleData];
-    
-    // Appliquer les filtres par colonne
-    Object.keys(activeFilters).forEach(key => {
-        if (key !== 'global') {
-            const columnIndex = parseInt(key);
-            const filterValue = activeFilters[key];
-            
-            filteredData = filteredData.filter(item => {
-                const values = Object.values(item);
-                if (values[columnIndex]) {
-                    return values[columnIndex].toString().toLowerCase().includes(filterValue);
-                }
-                return false;
-            });
-        }
-    });
-    
-    // Appliquer la recherche globale
-    if (activeFilters.global) {
-        const globalFilterValue = activeFilters.global;
-        filteredData = filteredData.filter(item => {
-            return Object.values(item).some(value => 
-                value.toString().toLowerCase().includes(globalFilterValue)
-            );
-        });
-    }
-    
-    currentData = filteredData;
-    displayData(filteredData);
-}
-
-// Fonction pour réinitialiser les filtres
-function setupResetButton() {
-    document.getElementById('resetFilters').addEventListener('click', function() {
-        // Réinitialiser les champs de filtre
-        document.querySelectorAll('.filter-input').forEach(input => {
-            input.value = '';
-        });
-        document.getElementById('globalSearch').value = '';
-        
-        // Réinitialiser les filtres actifs
-        activeFilters = {};
-        
-        // Afficher toutes les données
-        currentData = [...sampleData];
-        displayData(currentData);
-    });
-}
+let sortConfig = { key: null, direction: 'asc' };
+let currentView = 'table';
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
-    displayData(sampleData);
-    setupColumnFilters();
-    setupGlobalSearch();
-    setupResetButton();
-    
-    console.log('Tableau financier initialisé avec succès!');
-    console.log(`${sampleData.length} enregistrements chargés`);
+    initializeApp();
 });
 
-// Fonction pour ajouter de nouvelles données (exportée pour utilisation externe)
+function initializeApp() {
+    displayData(currentData);
+    setupEventListeners();
+    updateStats();
+}
+
+function setupEventListeners() {
+    // Recherche globale
+    document.getElementById('globalSearch').addEventListener('input', function(e) {
+        filterData(e.target.value);
+    });
+
+    // Réinitialisation
+    document.getElementById('resetFilters').addEventListener('click', function() {
+        document.getElementById('globalSearch').value = '';
+        currentData = [...sampleData];
+        displayData(currentData);
+        updateStats();
+    });
+
+    // Changement de vue
+    document.querySelectorAll('.view-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+            switchView(this.dataset.view);
+        });
+    });
+
+    // Tri des colonnes
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+            sortData(this.dataset.column);
+        });
+    });
+
+    // Modal
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+}
+
+function switchView(view) {
+    currentView = view;
+    
+    // Mettre à jour les boutons de vue
+    document.querySelectorAll('.view-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+    });
+    
+    // Afficher/masquer les vues
+    document.getElementById('tableView').classList.toggle('hidden', view !== 'table');
+    document.getElementById('cardsView').classList.toggle('hidden', view !== 'cards');
+    
+    // Régénérer l'affichage
+    displayData(currentData);
+}
+
+function displayData(data) {
+    if (currentView === 'table') {
+        displayTableView(data);
+    } else {
+        displayCardsView(data);
+    }
+    updateRowCount(data.length);
+}
+
+function displayTableView(data) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        const score = parseInt(item.score_global);
+        
+        row.innerHTML = `
+            <td>
+                <div style="font-weight: 600;">${item.entreprise_id}</div>
+                <div style="font-size: 0.75rem; color: #64748b;">${item.periode}</div>
+            </td>
+            <td>
+                <span class="score ${getScoreClass(score)}">${item.score_global}</span>
+            </td>
+            <td>
+                <span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span>
+            </td>
+            <td class="text-positive">${item.roe}</td>
+            <td class="text-positive">${item.netMargin}</td>
+            <td>${item.peRatio}</td>
+            <td class="text-positive">${item.freeCashFlow}</td>
+            <td>
+                <div style="font-size: 0.75rem;">${formatDate(item.date_analyse)}</div>
+            </td>
+            <td>
+                <button class="btn-icon" onclick="showDetails(${item.id})" title="Voir les détails">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function displayCardsView(data) {
+    const cardsBody = document.getElementById('cardsBody');
+    cardsBody.innerHTML = '';
+
+    data.forEach(item => {
+        const score = parseInt(item.score_global);
+        const card = document.createElement('div');
+        card.className = 'company-card';
+        
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="company-info">
+                    <h3>${item.entreprise_id}</h3>
+                    <div class="company-meta">${item.periode} • ${formatDate(item.date_analyse)}</div>
+                </div>
+                <div class="card-badges">
+                    <span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span>
+                </div>
+            </div>
+            
+            <div class="card-score">
+                <span class="score ${getScoreClass(score)}">${item.score_global}</span>
+            </div>
+            
+            <div class="card-stats">
+                <div class="stat">
+                    <span class="stat-value text-positive">${item.roe}</span>
+                    <span class="stat-label">ROE</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value text-positive">${item.netMargin}</span>
+                    <span class="stat-label">Marge Nette</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">${item.peRatio}</span>
+                    <span class="stat-label">P/E Ratio</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value text-positive">${item.freeCashFlow}</span>
+                    <span class="stat-label">Free Cash Flow</span>
+                </div>
+            </div>
+            
+            <div class="card-summary">
+                <div style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.5rem;">
+                    ${item.points_forts.split(',')[0]}...
+                </div>
+            </div>
+            
+            <div class="card-actions">
+                <button class="btn-icon" onclick="showDetails(${item.id})">
+                    <i class="fas fa-chart-bar"></i>
+                    Détails
+                </button>
+            </div>
+        `;
+        cardsBody.appendChild(card);
+    });
+}
+
+function filterData(searchTerm) {
+    if (!searchTerm) {
+        currentData = [...sampleData];
+    } else {
+        const term = searchTerm.toLowerCase();
+        currentData = sampleData.filter(item => 
+            Object.values(item).some(value => 
+                value.toString().toLowerCase().includes(term)
+            )
+        );
+    }
+    displayData(currentData);
+    updateStats();
+}
+
+function sortData(key) {
+    if (sortConfig.key === key) {
+        sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortConfig.key = key;
+        sortConfig.direction = 'asc';
+    }
+
+    currentData.sort((a, b) => {
+        let aValue = a[key];
+        let bValue = b[key];
+
+        // Conversion pour le tri numérique
+        if (key === 'score') {
+            aValue = parseInt(a.score_global);
+            bValue = parseInt(b.score_global);
+        }
+
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    displayData(currentData);
+}
+
+function showDetails(id) {
+    const item = sampleData.find(d => d.id === id);
+    if (!item) return;
+
+    document.getElementById('modalTitle').textContent = `Analyse ${item.entreprise_id}`;
+    
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+        <div style="display: grid; gap: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                <div class="stat">
+                    <span class="stat-label">Score Global</span>
+                    <span class="stat-value">${item.score_global}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Recommandation</span>
+                    <span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">INDICATEURS CLÉS</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <div class="stat">
+                        <span class="stat-label">ROE</span>
+                        <span class="stat-value text-positive">${item.roe}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Marge Nette</span>
+                        <span class="stat-value text-positive">${item.netMargin}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">P/E Ratio</span>
+                        <span class="stat-value">${item.peRatio}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">POINTS FORTS</h4>
+                <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #0ea5e9;">
+                    <div style="font-size: 0.875rem; color: #0369a1;">${item.points_forts}</div>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="margin-bottom: 0.75rem; font-size: 0.875rem; color: #64748b;">POINTS FAIBLES</h4>
+                <div style="background: #fef2f2; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #ef4444;">
+                    <div style="font-size: 0.875rem; color: #dc2626;">${item.points_faibles}</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('detailModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('detailModal').classList.add('hidden');
+}
+
+function updateStats() {
+    const total = currentData.length;
+    const buy = currentData.filter(d => d.recommandation === 'Acheter').length;
+    const hold = currentData.filter(d => d.recommandation === 'Conserver').length;
+    const avgScore = currentData.length > 0 
+        ? (currentData.reduce((sum, d) => sum + parseInt(d.score_global), 0) / currentData.length).toFixed(1)
+        : '0.0';
+
+    document.getElementById('totalCompanies').textContent = total;
+    document.getElementById('buyRecommendations').textContent = buy;
+    document.getElementById('holdRecommendations').textContent = hold;
+    document.getElementById('avgScore').textContent = avgScore;
+}
+
+function updateRowCount(count) {
+    document.getElementById('rowCount').textContent = `${count} résultat${count !== 1 ? 's' : ''}`;
+}
+
+function getScoreClass(score) {
+    if (score >= 80) return 'high';
+    if (score >= 60) return 'medium';
+    return 'low';
+}
+
+function formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString('fr-FR');
+}
+
+// Export pour la console
 window.addFinancialData = function(newData) {
     sampleData.push(newData);
     currentData.push(newData);
     displayData(currentData);
+    updateStats();
     return `Nouvelle donnée ajoutée. Total: ${sampleData.length} enregistrements`;
-};
-
-// Fonction pour récupérer les données actuelles
-window.getFinancialData = function() {
-    return currentData;
 };
