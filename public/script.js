@@ -80,24 +80,24 @@ function displayData(data) {
             <td>${formatDate(item.date_analyse)}</td>
             <td>${item.periode}</td>
             <td class="positive">${formatPercentage(item.roe)}</td>
-            <td class="positive">${formatPercentage(item.netmargin)}</td>
-            <td class="positive">${formatPercentage(item.grossmargin)}</td>
+            <td class="positive">${formatPercentage(item.netMargin)}</td>
+            <td class="positive">${formatPercentage(item.grossMargin)}</td>
             <td><span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span></td>
             <td>${formatDateTime(item.created_at)}</td>
-            <td>${formatPercentage(item.sgamargin)}</td>
-            <td>${formatNumber(item.debttoequity)}</td>
-            <td class="positive">${formatNumber(item.currentratio)}</td>
-            <td class="positive">${formatNumber(item.interestcoverage)}</td>
-            <td>${formatNumber(item.peratio)}</td>
-            <td>${formatPercentage(item.earningsyield)}</td>
-            <td>${formatNumber(item.pricetofcf)}</td>
-            <td>${formatNumber(item.pricetomm200)}</td>
-            <td>${formatPercentage(item.dividendyield)}</td>
-            <td>${formatNumber(item.pbratio)}</td>
-            <td>${formatNumber(item.pegratio)}</td>
+            <td>${formatPercentage(item.sgaMargin)}</td>
+            <td>${formatNumber(item.debtToEquity)}</td>
+            <td class="positive">${formatNumber(item.currentRatio)}</td>
+            <td class="positive">${formatNumber(item.interestCoverage)}</td>
+            <td>${formatNumber(item.peRatio)}</td>
+            <td>${formatPercentage(item.earningsYield)}</td>
+            <td>${formatNumber(item.priceToFCF)}</td>
+            <td>${formatNumber(item.priceToMM200)}</td>
+            <td>${formatPercentage(item.dividendYield)}</td>
+            <td>${formatNumber(item.pbRatio)}</td>
+            <td>${formatNumber(item.pegRatio)}</td>
             <td class="positive">${formatPercentage(item.roic)}</td>
-            <td class="positive">${formatCurrency(item.freecashflow)}</td>
-            <td>${formatNumber(item.evtoebitda)}</td>
+            <td class="positive">${formatCurrency(item.freeCashFlow)}</td>
+            <td>${formatNumber(item.evToEbitda)}</td>
             <td><span class="${getScoreClass(item.score_global)}">${item.score_global}/100</span></td>
             <td title="${item.points_forts}">${truncateText(item.points_forts, 40)}</td>
             <td title="${item.points_faibles}">${truncateText(item.points_faibles, 40)}</td>
