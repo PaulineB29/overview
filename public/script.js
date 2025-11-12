@@ -213,17 +213,22 @@ function formatPercentage(value) {
 
 function formatNumber(value) {
     if (value === null || value === undefined) return '-';
-    return value.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const numberValue = parseFloat(value);
+    if (isNaN(numberValue)) return '-';
+    return numberValue.toFixed(2);
 }
 
 function formatCurrency(value) {
     if (value === null || value === undefined) return '-';
-    if (value >= 1000000) {
-        return `€${(value / 1000000).toFixed(1)}M`;
-    } else if (value >= 1000) {
-        return `€${(value / 1000).toFixed(1)}K`;
+    const numberValue = parseFloat(value);
+    if (isNaN(numberValue)) return '-';
+    
+    if (numberValue >= 1000000) {
+        return `€${(numberValue / 1000000).toFixed(1)}M`;
+    } else if (numberValue >= 1000) {
+        return `€${(numberValue / 1000).toFixed(1)}K`;
     }
-    return `€${value.toLocaleString('fr-FR')}`;
+    return `€${numberValue.toFixed(0)}`;
 }
 
 function truncateText(text, maxLength) {
