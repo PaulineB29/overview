@@ -77,13 +77,14 @@ function displayData(data) {
         row.innerHTML = `
             <td>${item.id}</td>
             <td><strong>${item.entreprise_id}</strong></td>
+             <td><strong>${item.entreprise_nom || '-'}</strong></td>
+            <td>${item.entreprise_symbole || '-'}</td>
             <td>${formatDate(item.date_analyse)}</td>
             <td>${item.periode}</td>
             <td class="positive">${formatPercentage(item.roe)}</td>
             <td class="positive">${formatPercentage(item.netMargin)}</td>
             <td class="positive">${formatPercentage(item.grossMargin)}</td>
             <td><span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span></td>
-            <td>${formatDateTime(item.created_at)}</td>
             <td>${formatPercentage(item.sgaMargin)}</td>
             <td>${formatNumber(item.debtToEquity)}</td>
             <td class="positive">${formatNumber(item.currentRatio)}</td>
@@ -101,6 +102,7 @@ function displayData(data) {
             <td><span class="${getScoreClass(item.score_global)}">${item.score_global}/100</span></td>
             <td title="${item.points_forts}">${truncateText(item.points_forts, 40)}</td>
             <td title="${item.points_faibles}">${truncateText(item.points_faibles, 40)}</td>
+            <td>${formatDateTime(item.created_at)}</td>
         `;
         tbody.appendChild(row);
     });
