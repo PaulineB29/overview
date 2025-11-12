@@ -62,7 +62,7 @@ function displayData(data) {
     if (data.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="26" style="text-align: center; padding: 40px; color: #64748b;">
+                <td colspan="22" style="text-align: center; padding: 40px; color: #64748b;">
                     Aucune donnée trouvée
                 </td>
             </tr>
@@ -75,8 +75,6 @@ function displayData(data) {
         const row = document.createElement('tr');
         
         row.innerHTML = `
-            <td>${item.id}</td>
-            <td><strong>${item.entreprise_id}</strong></td>
              <td><strong>${item.entreprise_nom || '-'}</strong></td>
             <td>${item.entreprise_symbole || '-'}</td>
             <td>${formatDate(item.date_analyse)}</td>
@@ -99,10 +97,6 @@ function displayData(data) {
             <td class="positive">${formatPercentage(item.roic)}</td>
             <td class="positive">${formatCurrency(item.freeCashFlow)}</td>
             <td>${formatNumber(item.evToEbitda)}</td>
-            <td><span class="${getScoreClass(item.score_global)}">${item.score_global}/100</span></td>
-            <td title="${item.points_forts}">${truncateText(item.points_forts, 40)}</td>
-            <td title="${item.points_faibles}">${truncateText(item.points_faibles, 40)}</td>
-            <td>${formatDateTime(item.created_at)}</td>
         `;
         tbody.appendChild(row);
     });
@@ -208,7 +202,13 @@ function formatDateTime(dateTimeString) {
 
 function formatPercentage(value) {
     if (value === null || value === undefined) return '-';
-    return `${value}%`;
+    try {
+        const numberValue = parseFloat(value);
+        if (isNaN(numberValue)) return '-';
+        return `${numberValue.toFixed(2)}%`;
+    } catch (error) {
+        return '-';
+    }
 }
 
 function formatNumber(value) {
