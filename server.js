@@ -6,7 +6,7 @@ const app = express();
 const port = process.env.PORT || 10000;
 
 // Middleware pour servir les fichiers statiques
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
