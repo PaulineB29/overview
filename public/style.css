@@ -576,3 +576,72 @@ tbody tr:hover {
     font-size: 0.9rem;
     margin: 0;
 }
+/* Bandeau noir de navigation */
+.top-nav-black {
+    background: #000000;
+    color: white;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    font-family: Arial, sans-serif;
+}
+
+.nav-container-black {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 50px;
+}
+
+.nav-brand-black {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.nav-title {
+    color: white;
+}
+
+.nav-separator {
+    margin: 0 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.nav-menu-black {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link-black {
+    background: none;
+    border: none;
+    color: #cccccc;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 0;
+    transition: color 0.2s ease;
+    font-family: inherit;
+}
+
+.nav-link-black:hover {
+    color: white;
+}
+
+.nav-link-black.active {
+    color: white;
+    font-weight: 500;
+}
+
+/* Ajustement du contenu principal pour compenser le bandeau fixe */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.main-content {
+    padding-top: 0;
+}
