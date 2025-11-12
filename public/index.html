@@ -3,63 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau d'Analyses Financières</title>
+    <title>Financial Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>📊 Analyses Financières</h1>
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" id="globalSearch" placeholder="Rechercher...">
-                </div>
-                <button id="resetFilters" class="btn-reset">Réinitialiser</button>
-                <button id="refreshData" class="btn-refresh">Actualiser</button>
+    <!-- Menu de navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>Financial Dashboard</h2>
             </div>
-        </header>
+            <div class="nav-menu">
+                <button class="nav-btn active" data-screen="financial-analysis">📊 Analyse Financière</button>
+                <button class="nav-btn" data-screen="portfolio-builder">🛠️ Portfolio Builder</button>
+            </div>
+        </div>
+    </nav>
 
-        <div class="loading" id="loading">Chargement des données...</div>
-
-        <main class="main-content">
+    <!-- Écran Analyse Financière (actif par défaut) -->
+    <div id="financial-analysis" class="screen active">
+        <div class="main-content">
+            <!-- Vos contrôles existants -->
+            <div class="controls">
+                <input type="text" id="globalSearch" placeholder="Rechercher...">
+                <button id="resetFilters" class="btn secondary small">Réinitialiser</button>
+                <button id="refreshData" class="btn small">Actualiser</button>
+            </div>
+            
+            <!-- Statistiques -->
+            <div class="stats">
+                <span id="rowCount">0</span> entreprises analysées
+                <span id="lastUpdate" class="last-update"></span>
+            </div>
+            
+            <!-- Tableau -->
             <div class="table-container">
-                <table id="financialTable">
-                    <thead>
+                <table class="data-table">
+                    <thead class="table-header">
                         <tr>
                             <th data-column="entreprise_nom" class="sortable">Nom Entreprise</th>
                             <th data-column="entreprise_symbole" class="sortable">Symbole</th>
-                            <th data-column="date_analyse" class="sortable"><span>Date Analyse</span></th>
-                            <th data-column="periode" class="sortable"><span>Période</span></th>
-                            <th data-column="roe" class="sortable"><span>ROE</span></th>
-                            <th data-column="netMargin" class="sortable"><span>Marge Nette</span></th>
-                            <th data-column="grossMargin" class="sortable"><span>Marge Brute</span></th>
-                            <th data-column="recommandation" class="sortable"><span>Recommandation</span></th>
-                            <th data-column="sgaMargin" class="sortable"><span>Marge SGA</span></th>
-                            <th data-column="debtToEquity" class="sortable"><span>Dette/Capitaux</span></th>
-                            <th data-column="currentRatio" class="sortable"><span>Ratio Courant</span></th>
-                            <th data-column="interestCoverage" class="sortable"><span>Couverture Intérêts</span></th>
-                            <th data-column="peRatio" class="sortable"><span>P/E Ratio</span></th>
-                            <th data-column="earningsYield" class="sortable"><span>Rendement</span></th>
-                            <th data-column="priceToFCF" class="sortable"><span>Price/FCF</span></th>
-                            <th data-column="priceToMM200" class="sortable"><span>Price/MM200</span></th>
-                            <th data-column="dividendYield" class="sortable"><span>Dividend Yield</span></th>
-                            <th data-column="pbRatio" class="sortable"><span>P/B Ratio</span></th>
-                            <th data-column="pegRatio" class="sortable"><span>PEG Ratio</span></th>
-                            <th data-column="roic" class="sortable"><span>ROIC</span></th>
-                            <th data-column="freeCashFlow" class="sortable"><span>Free Cash Flow</span></th>
-                            <th data-column="evToEbitda" class="sortable"><span>EV/EBITDA</span></th>
+                            <th data-column="date_analyse" class="sortable">Date Analyse</th>
+                            <th data-column="periode" class="sortable">Période</th>
+                            <th data-column="roe" class="sortable">ROE</th>
+                            <th data-column="netmargin" class="sortable">Marge Nette</th>
+                            <th data-column="grossmargin" class="sortable">Marge Brute</th>
+                            <th data-column="recommandation" class="sortable">Recommandation</th>
+                            <th data-column="sgamargin" class="sortable">Marge SGA</th>
+                            <th data-column="debtequity" class="sortable">Dette/Equity</th>
+                            <th data-column="currentratio" class="sortable">Current Ratio</th>
+                            <th data-column="interestcoverage" class="sortable">Couverture Intérêt</th>
+                            <th data-column="peratio" class="sortable">P/E Ratio</th>
+                            <th data-column="earningsyield" class="sortable">Earnings Yield</th>
+                            <th data-column="pricetofcf" class="sortable">Price to FCF</th>
+                            <th data-column="pricetomm200" class="sortable">Price to 200MA</th>
+                            <th data-column="dividendyield" class="sortable">Dividend Yield</th>
+                            <th data-column="pbratio" class="sortable">P/B Ratio</th>
+                            <th data-column="pegratio" class="sortable">PEG Ratio</th>
+                            <th data-column="roic" class="sortable">ROIC</th>
+                            <th data-column="freecashflow" class="sortable">Free Cash Flow</th>
+                            <th data-column="evtoebitda" class="sortable">EV/EBITDA</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody"></tbody>
+                    <tbody id="tableBody">
+                        <!-- Les données seront insérées ici par JavaScript -->
+                    </tbody>
                 </table>
             </div>
-            
-            <div class="table-footer">
-                <span id="rowCount">0</span> résultats affichés
-                <span class="last-update" id="lastUpdate"></span>
-            </div>
-        </main>
+        </div>
     </div>
+
+    <!-- Écran Portfolio Builder (caché par défaut) -->
+    <div id="portfolio-builder" class="screen">
+        <div class="main-content">
+            <div class="placeholder-content">
+                <h3>🛠️ Portfolio Builder</h3>
+                <p>Cette fonctionnalité sera bientôt disponible !</p>
+                <p>Ici vous pourrez construire et analyser votre portefeuille d'investissement.</p>
+                <div class="placeholder-features">
+                    <div class="feature-card">
+                        <h4>📈 Analyse de Portefeuille</h4>
+                        <p>Visualisez la performance de vos investissements</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚖️ Répartition d'Actifs</h4>
+                        <p>Analysez la diversification de votre portefeuille</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎯 Objectifs d'Investissement</h4>
+                        <p>Définissez et suivez vos objectifs financiers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading">Chargement des données...</div>
 
     <script src="script.js"></script>
 </body>
