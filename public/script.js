@@ -96,28 +96,28 @@ function displayData(data) {
         const row = document.createElement('tr');
         
         row.innerHTML = `
-             <td><strong>${item.entreprise_nom || '-'}</strong></td>
+            <td><strong>${item.entreprise_nom || '-'}</strong></td>
             <td>${item.entreprise_symbole || '-'}</td>
             <td>${formatDate(item.date_analyse)}</td>
             <td>${item.periode}</td>
-            <td class="positive">${formatPercentage(item.roe)}</td>
-            <td class="positive">${formatPercentage(item.netMargin)}</td>
-            <td class="positive">${formatPercentage(item.grossMargin)}</td>
-            <td><span class="badge ${item.recommandation.toLowerCase()}">${item.recommandation}</span></td>
-            <td>${formatPercentage(item.sgaMargin)}</td>
-            <td>${formatNumber(item.debtToEquity)}</td>
-            <td class="positive">${formatNumber(item.currentRatio)}</td>
-            <td class="positive">${formatNumber(item.interestCoverage)}</td>
-            <td>${formatNumber(item.peRatio)}</td>
-            <td>${formatPercentage(item.earningsYield)}</td>
-            <td>${formatNumber(item.priceToFCF)}</td>
-            <td>${formatNumber(item.priceToMM200)}</td>
-            <td>${formatPercentage(item.dividendYield)}</td>
-            <td>${formatNumber(item.pbRatio)}</td>
-            <td>${formatNumber(item.pegRatio)}</td>
-            <td class="positive">${formatPercentage(item.roic)}</td>
-            <td class="positive">${formatCurrency(item.freeCashFlow)}</td>
-            <td>${formatNumber(item.evToEbitda)}</td>
+            <td class="${getColorClass(item.roe, 'high')}">${formatPercentage(item.roe)}</td>
+            <td class="${getColorClass(item.netmargin, 'high')}">${formatPercentage(item.netmargin)}</td>
+            <td class="${getColorClass(item.grossmargin, 'high')}">${formatPercentage(item.grossmargin)}</td>
+            <td><span class="badge ${item.recommandation ? item.recommandation.toLowerCase() : ''}">${item.recommandation || '-'}</span></td>
+            <td class="${getColorClass(item.sgamargin, 'low')}">${formatPercentage(item.sgamargin)}</td>
+            <td class="${getColorClass(item.debtequity, 'low')}">${formatNumber(item.debtequity)}</td>
+            <td class="${getColorClass(item.currentratio, 'high')}">${formatNumber(item.currentratio)}</td>
+            <td class="${getColorClass(item.interestcoverage, 'high')}">${formatNumber(item.interestcoverage)}</td>
+            <td class="${getColorClass(item.peratio, 'low')}">${formatNumber(item.peratio)}</td>
+            <td class="${getColorClass(item.earningsyield, 'high')}">${formatPercentage(item.earningsyield)}</td>
+            <td class="${getColorClass(item.pricetofcf, 'low')}">${formatNumber(item.pricetofcf)}</td>
+            <td class="${getColorClass(item.pricetomm200, 'low')}">${formatNumber(item.pricetomm200)}</td>
+            <td class="${getColorClass(item.dividendyield, 'high')}">${formatPercentage(item.dividendyield)}</td>
+            <td class="${getColorClass(item.pbratio, 'low')}">${formatNumber(item.pbratio)}</td>
+            <td class="${getColorClass(item.pegratio, 'low')}">${formatNumber(item.pegratio)}</td>
+            <td class="${getColorClass(item.roic, 'high')}">${formatPercentage(item.roic)}</td>
+            <td class="${getColorClass(item.freecashflow, 'high')}">${formatCurrency(item.freecashflow)}</td>
+            <td class="${getColorClass(item.evtoebitda, 'low')}">${formatNumber(item.evtoebitda)}</td>
         `;
         tbody.appendChild(row);
     });
@@ -165,6 +165,22 @@ function sortData(key) {
     displayData(sortedData);
 }
 
+function getColorClass(value, type) {
+    if (value === null || value === undefined) return '';
+    
+    const numValue = parseFloat(value);
+    if (isNaN(numValue)) return '';
+    
+    if (type === 'high') {
+        if (numValue > 0) return 'positive';
+        if (numValue < 0) return 'negative';
+    } else if (type === 'low') {
+        if (numValue < 0) return 'positive';
+        if (numValue > 0) return 'negative';
+    }
+    
+    return '';
+}
 function updateRowCount(count) {
     document.getElementById('rowCount').textContent = count;
 }
