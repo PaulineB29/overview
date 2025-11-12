@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Gestion de la navigation entre écrans
 function setupNavigation() {
-    const navButtons = document.querySelectorAll('.nav-link-black'); 
+    const navButtons = document.querySelectorAll('.nav-link-black');
     const screens = document.querySelectorAll('.screen');
 
     navButtons.forEach(button => {
@@ -126,6 +126,23 @@ function displayData(data) {
     updateLastUpdate();
 }
 
+function getColorClass(value, type) {
+    if (value === null || value === undefined) return '';
+    
+    const numValue = parseFloat(value);
+    if (isNaN(numValue)) return '';
+    
+    if (type === 'high') {
+        if (numValue > 0) return 'positive';
+        if (numValue < 0) return 'negative';
+    } else if (type === 'low') {
+        if (numValue < 0) return 'positive';
+        if (numValue > 0) return 'negative';
+    }
+    
+    return '';
+}
+
 function filterData(searchTerm) {
     if (!searchTerm) {
         displayData(currentData);
@@ -165,22 +182,6 @@ function sortData(key) {
     displayData(sortedData);
 }
 
-function getColorClass(value, type) {
-    if (value === null || value === undefined) return '';
-    
-    const numValue = parseFloat(value);
-    if (isNaN(numValue)) return '';
-    
-    if (type === 'high') {
-        if (numValue > 0) return 'positive';
-        if (numValue < 0) return 'negative';
-    } else if (type === 'low') {
-        if (numValue < 0) return 'positive';
-        if (numValue > 0) return 'negative';
-    }
-    
-    return '';
-}
 function updateRowCount(count) {
     document.getElementById('rowCount').textContent = count;
 }
@@ -215,26 +216,9 @@ function showError(message) {
     }
 }
 
-function getScoreClass(score) {
-    if (score >= 80) return 'score-high';
-    if (score >= 60) return 'score-medium';
-    return 'score-low';
-}
-
 function formatDate(dateString) {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('fr-FR');
-}
-
-function formatDateTime(dateTimeString) {
-    if (!dateTimeString) return '-';
-    return new Date(dateTimeString).toLocaleString('fr-FR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
 }
 
 function formatPercentage(value) {
@@ -266,10 +250,4 @@ function formatCurrency(value) {
         return `€${(numberValue / 1000).toFixed(1)}K`;
     }
     return `€${numberValue.toFixed(0)}`;
-}
-
-function truncateText(text, maxLength) {
-    if (!text) return '-';
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
 }
