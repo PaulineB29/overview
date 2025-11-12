@@ -29,7 +29,7 @@ pool.on('error', (err) => {
 // Route API
 app.get('/api/financial-data', async (req, res) => {
     try {
-        console.log('📥 Requête pour les données financières reçue');
+        console.log('[INFO] Requête pour les données financières reçue');
         
         const query = `
               SELECT 
@@ -59,27 +59,36 @@ app.get('/api/financial-data', async (req, res) => {
                 score_global,
                 points_forts,
                 points_faibles
-            FROM analyses_buffett  
-            ORDER BY created_at DESC
-        `;
-        `;
+            FROM analyses_buffett ORDER BY created_at DESC`;
+  
 
         const result = await pool.query(query);
-        console.log(`[SUCCESS] ${result.rows.length} enregistrements récupérés`);
+        console.log('[SUCCESS] ' + result.rows.length + ' enregistrements récupérés');
         res.json(result.rows);
         
     } catch (error) {
-        console.error('Erreur:', error);
-        res.status(500).json({ error: 'Erreur base de données' });
-    }
+            console.error('[ERROR] Erreur détaillée:', error);
+            res.status(500).json({ 
+                error: 'Erreur base de données',
+                message: error.message,
+                detail: error.detail
+            });
+        }
 });
 
 // Route pour servir le frontend
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Route de santé
+app.get('/health', (req, res) => {
+    res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // Démarrer le serveur
 app.listen(port, () => {
-    console.log(`Serveur démarré sur le port ${port}`);
+    console.log('[START] Serveur démarré sur le port ' + port);
+    console.log('[INFO] Health check: http://localhost:' + port + '/health');
+    console.log('[INFO] API: http://localhost:' + port + '/api/financial-data');
 });
