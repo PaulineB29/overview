@@ -11,10 +11,7 @@ async function loadDataFromDB() {
     showLoading(true);
     
     try {
-        // Utilise l'URL actuelle pour construire le chemin de l'API
-        const baseUrl = window.location.origin;
-        const response = await fetch(`${baseUrl}/api/financial-data`);
-        
+        const response = await fetch('https://overview-analyse.onrender.com/api/financial-data');
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
         }
