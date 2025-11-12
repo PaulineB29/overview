@@ -5,28 +5,24 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 10000;
 
-// Middleware pour servir les fichiers statiques
-app.use(express.static('public'));
+app.use(express.static(__dirname));
 
-// Configuration de la base de données
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_BA2xWJemNa6k@ep-red-resonance-ag335bym-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
-  ssl: {
-    rejectUnauthorized: false,
-    require: true
-  }
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false, require: true }
 });
 
-// Test de connexion à la base de données
-pool.on('connect', () => {
-  console.log('[SUCCESS] Connecté à PostgreSQL');
-});
+// Test de connexion corrigé
+pool.query('SELECT NOW()')
+  .then(() => console.log('[SUCCESS] Connecté à PostgreSQL'))
+  .catch(err => console.log('[ERROR] Erreur connexion PostgreSQL:', err.message));
 
-pool.on('error', (err) => {
-  console.error('[ERROR] Erreur de connexion PostgreSQL:', err);
-});
-
-// Route API
+// Route API CORRECTE
+app.get('/api/financial-data', async (req, res) => {
+  try {
+    console.log('[INFO] Récupération des données...');
+    
+    // REQUÊTE SIMPLE - utilise SELECT * pour éviter les erreurs de noms
     const result = await pool.query('SELECT * FROM analyses_buffett ORDER BY created_at DESC LIMIT 100');
     
     console.log('[SUCCESS] ' + result.rows.length + ' enregistrements récupérés');
@@ -34,12 +30,8 @@ pool.on('error', (err) => {
     
   } catch (error) {
     console.error('[ERROR] Erreur détaillée:', error.message);
-    }
-});
 
-// Route pour servir le frontend
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+  }
 });
 
 // Route de santé
