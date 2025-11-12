@@ -24,7 +24,6 @@
 
     <!-- Écran Analyse Financière (actif par défaut) -->
     <div id="financial-analysis" class="screen active">
-        <!-- Votre contenu existant du tableau -->
         <div class="main-content">
             <div class="controls">
                 <input type="text" id="globalSearch" placeholder="Rechercher...">
@@ -39,7 +38,35 @@
             
             <div class="table-container">
                 <table class="data-table">
-                    <!-- ... votre tableau existant ... -->
+                    <thead class="table-header">
+                        <tr>
+                            <th data-column="entreprise_nom" class="sortable">Nom Entreprise</th>
+                            <th data-column="entreprise_symbole" class="sortable">Symbole</th>
+                            <th data-column="date_analyse" class="sortable">Date Analyse</th>
+                            <th data-column="periode" class="sortable">Période</th>
+                            <th data-column="roe" class="sortable">ROE</th>
+                            <th data-column="netmargin" class="sortable">Marge Nette</th>
+                            <th data-column="grossmargin" class="sortable">Marge Brute</th>
+                            <th data-column="recommandation" class="sortable">Recommandation</th>
+                            <th data-column="sgamargin" class="sortable">Marge SGA</th>
+                            <th data-column="debtequity" class="sortable">Dette/Equity</th>
+                            <th data-column="currentratio" class="sortable">Current Ratio</th>
+                            <th data-column="interestcoverage" class="sortable">Couverture Intérêt</th>
+                            <th data-column="peratio" class="sortable">P/E Ratio</th>
+                            <th data-column="earningsyield" class="sortable">Earnings Yield</th>
+                            <th data-column="pricetofcf" class="sortable">Price to FCF</th>
+                            <th data-column="pricetomm200" class="sortable">Price to 200MA</th>
+                            <th data-column="dividendyield" class="sortable">Dividend Yield</th>
+                            <th data-column="pbratio" class="sortable">P/B Ratio</th>
+                            <th data-column="pegratio" class="sortable">PEG Ratio</th>
+                            <th data-column="roic" class="sortable">ROIC</th>
+                            <th data-column="freecashflow" class="sortable">Free Cash Flow</th>
+                            <th data-column="evtoebitda" class="sortable">EV/EBITDA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Les données seront insérées ici par JavaScript -->
+                    </tbody>
                 </table>
             </div>
         </div>
