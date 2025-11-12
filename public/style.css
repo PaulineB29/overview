@@ -382,3 +382,47 @@ tbody tr:hover {
         font-size: 14px;
     }
 }
+/* Réduction de l'espacement des lignes du tableau */
+.data-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.data-table th,
+.data-table td {
+    padding: 6px 10px !important; /* Réduction importante du padding */
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 13px;
+    line-height: 1.2;
+    height: 32px; /* Hauteur fixe réduite */
+}
+
+/* Réduction spécifique pour l'en-tête */
+.data-table th {
+    padding: 8px 10px !important;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #f8fafc;
+}
+
+/* Réduction de l'espacement entre les lignes */
+.data-table tr {
+    height: 32px;
+}
+
+/* Ajustement des badges */
+.badge {
+    padding: 2px 6px;
+    font-size: 11px;
+}
+
+/* Ajustement des scores */
+.score-high, .score-medium, .score-low {
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+/* Réduction de l'espacement du conteneur */
+.table-container {
+    margin: 10px 0;
+    padding: 0;
