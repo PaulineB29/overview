@@ -33,7 +33,7 @@ app.get('/api/financial-data', async (req, res) => {
       SELECT DISTINCT ON (a.entreprise_id) 
         a.*,
         e.nom as entreprise_nom,
-        e.symbole as entreprise_symbole,
+        e.symbole as entreprise_symbole
       FROM analyses_buffett a
       LEFT JOIN entreprises e ON a.entreprise_id = e.id
       ORDER BY a.entreprise_id, a.created_at DESC
