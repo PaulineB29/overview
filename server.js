@@ -11,7 +11,19 @@ app.use(express.static('public'));
 // Configuration de la base de données
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_BA2xWJemNa6k@ep-red-resonance-ag335bym-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
-  ssl: { rejectUnauthorized: false }
+  ssl: {
+    rejectUnauthorized: false,
+    require: true
+  }
+});
+
+// Test de connexion à la base de données
+pool.on('connect', () => {
+  console.log('✅ Connecté à PostgreSQL');
+});
+
+pool.on('error', (err) => {
+  console.error('❌ Erreur de connexion PostgreSQL:', err);
 });
 
 // Route API
@@ -20,7 +32,36 @@ app.get('/api/financial-data', async (req, res) => {
         console.log('📥 Requête pour les données financières reçue');
         
         const query = `
-            SELECT * FROM analyses_financières ORDER BY created_at DESC
+              SELECT 
+                id,
+                entreprise_id,
+                date_analyse,
+                periode,
+                roe,
+                netmargin,
+                grossmargin,
+                recommandation,
+                created_at,
+                sgamargin,
+                debttoequity,
+                currentratio,
+                interestcoverage,
+                peratio,
+                earningsyield,
+                pricetofcf,
+                pricetomm200,
+                dividendyield,
+                pbratio,
+                pegratio,
+                roic,
+                freecashflow,
+                evtoebitda,
+                score_global,
+                points_forts,
+                points_faibles
+            FROM analyses_buffett  
+            ORDER BY created_at DESC
+        `;
         `;
 
         const result = await pool.query(query);
