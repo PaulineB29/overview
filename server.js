@@ -65,7 +65,7 @@ app.get('/api/financial-data', async (req, res) => {
         `;
 
         const result = await pool.query(query);
-        console.log(`SUCCESS] ${result.rows.length} enregistrements récupérés`);
+        console.log(`[SUCCESS] ${result.rows.length} enregistrements récupérés`);
         res.json(result.rows);
         
     } catch (error) {
