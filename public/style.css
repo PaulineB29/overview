@@ -301,3 +301,84 @@ tbody tr:hover {
         text-align: center;
     }
 }
+/* Conteneur principal avec scroll */
+.main-content {
+    overflow: hidden;
+}
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 20px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+}
+
+/* Header fixe optionnel */
+.table-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Ajustement du tableau pour le scroll */
+.data-table {
+    min-width: 1200px; /* Largeur minimale pour forcer le scroll si nécessaire */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Style des cellules pour le scroll */
+.data-table th,
+.data-table td {
+    white-space: nowrap;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Colonnes importantes plus larges */
+.data-table td:nth-child(3), /* Nom entreprise */
+.data-table td:nth-child(25), /* Points forts */
+.data-table td:nth-child(26) { /* Points faibles */
+    white-space: normal;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+/* Indicateur visuel pour le scroll */
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 10px -15px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
