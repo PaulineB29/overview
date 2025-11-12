@@ -5,7 +5,28 @@ let sortConfig = { key: null, direction: 'asc' };
 document.addEventListener('DOMContentLoaded', function() {
     loadDataFromDB();
     setupEventListeners();
+    setupNavigation();
 });
+
+// Gestion de la navigation entre écrans
+function setupNavigation() {
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const screens = document.querySelectorAll('.screen');
+
+    navButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetScreen = this.dataset.screen;
+            
+            // Désactive tous les boutons et écrans
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            screens.forEach(screen => screen.classList.remove('active'));
+            
+            // Active le bouton et l'écran sélectionné
+            this.classList.add('active');
+            document.getElementById(targetScreen).classList.add('active');
+        });
+    });
+}
 
 async function loadDataFromDB() {
     showLoading(true);
