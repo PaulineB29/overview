@@ -27,29 +27,13 @@ pool.on('error', (err) => {
 });
 
 // Route API
-app.get('/api/financial-data', async (req, res) => {
-    try {
-        // First, get the correct column names from the database
-        const columnsResult = await pool.query(`
-            SELECT column_name 
-            FROM information_schema.columns 
-            WHERE table_name = 'analyses_buffett' 
-            AND table_schema = 'public'
-            ORDER BY ordinal_position
-        `);
-        
-        const columnList = columnsResult.rows.map(row => row.column_name).join(', ');
-        
-        // Then, use these columns in your query
-        const query = `SELECT ${columnList} FROM analyses_buffett ORDER BY created_at DESC`;
-        
-        const result = await pool.query(query);
-        console.log(`[SUCCESS] ${result.rows.length} records retrieved`);
-        res.json(result.rows);
-        
-    } catch (error) {
-        console.error('[ERROR] Database error:', error);
-        res.status(500).json({ error: 'Database error', message: error.message });
+    const result = await pool.query('SELECT * FROM analyses_buffett ORDER BY created_at DESC LIMIT 100');
+    
+    console.log('[SUCCESS] ' + result.rows.length + ' enregistrements récupérés');
+    res.json(result.rows);
+    
+  } catch (error) {
+    console.error('[ERROR] Erreur détaillée:', error.message);
     }
 });
 
