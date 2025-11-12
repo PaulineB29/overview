@@ -28,11 +28,15 @@ app.get('/api/financial-data', async (req, res) => {
   try {
     console.log('[INFO] Récupération des données les plus récentes par entreprise...');
     
-    // REQUÊTE MODIFIÉE - sous-requête pour récupérer seulement la ligne la plus récente par entreprise_id
-    const result = await pool.query(`
-      SELECT DISTINCT ON (entreprise_id) *
-      FROM analyses_buffett 
-      ORDER BY entreprise_id, created_at DESC
+    // REQUÊTE Mpour récupérer seulement la ligne la plus récente par entreprise_id + nom entreprise dans table entreprises
+        const result = await pool.query(`
+      SELECT DISTINCT ON (a.entreprise_id) 
+        a.*,
+        e.nom as entreprise_nom,
+        e.symbole as entreprise_symbole,
+      FROM analyses_buffett a
+      LEFT JOIN entreprises e ON a.entreprise_id = e.id
+      ORDER BY a.entreprise_id, a.created_at DESC
     `);
     
     console.log('[SUCCESS] ' + result.rows.length + ' entreprises récupérées');
