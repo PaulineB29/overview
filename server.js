@@ -23,14 +23,19 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Route API
+// Route API - seulement les données les plus récentes par entreprise
 app.get('/api/financial-data', async (req, res) => {
   try {
-    console.log('[INFO] Récupération des données...');
+    console.log('[INFO] Récupération des données les plus récentes par entreprise...');
     
-    const result = await pool.query('SELECT * FROM analyses_buffett ORDER BY created_at DESC LIMIT 100');
+    // REQUÊTE MODIFIÉE - sous-requête pour récupérer seulement la ligne la plus récente par entreprise_id
+    const result = await pool.query(`
+      SELECT DISTINCT ON (entreprise_id) *
+      FROM analyses_buffett 
+      ORDER BY entreprise_id, created_at DESC
+    `);
     
-    console.log('[SUCCESS] ' + result.rows.length + ' enregistrements récupérés');
+    console.log('[SUCCESS] ' + result.rows.length + ' entreprises récupérées');
     res.json(result.rows);
     
   } catch (error) {
