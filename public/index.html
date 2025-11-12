@@ -7,18 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Menu de navigation -->
-    <nav class="top-nav">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <h2>Financial Dashboard</h2>
-            </div>
-            <div class="nav-menu">
-                <button class="nav-btn active" data-screen="financial-analysis">📊 Analyse Financière</button>
-                <button class="nav-btn" data-screen="portfolio-builder">🛠️ Portfolio Builder</button>
-            </div>
+    
+<!-- Bandeau noir de navigation -->
+<nav class="top-nav-black">
+    <div class="nav-container-black">
+        <div class="nav-brand-black">
+            <span class="nav-title">Financial Dashboard</span>
         </div>
-    </nav>
+        <div class="nav-separator">|</div>
+        <div class="nav-menu-black">
+            <button class="nav-link-black active" data-screen="financial-analysis">Analyse Financière</button>
+            <div class="nav-separator">|</div>
+            <button class="nav-link-black" data-screen="portfolio-builder">Portfolio Builder</button>
+        </div>
+    </div>
+</nav>
 
     <!-- Écran Analyse Financière (actif par défaut) -->
     <div id="financial-analysis" class="screen active">
@@ -69,31 +72,6 @@
                         <!-- Les données seront insérées ici par JavaScript -->
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Écran Portfolio Builder (caché par défaut) -->
-    <div id="portfolio-builder" class="screen">
-        <div class="main-content">
-            <div class="placeholder-content">
-                <h3>🛠️ Portfolio Builder</h3>
-                <p>Cette fonctionnalité sera bientôt disponible !</p>
-                <p>Ici vous pourrez construire et analyser votre portefeuille d'investissement.</p>
-                <div class="placeholder-features">
-                    <div class="feature-card">
-                        <h4>📈 Analyse de Portefeuille</h4>
-                        <p>Visualisez la performance de vos investissements</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>⚖️ Répartition d'Actifs</h4>
-                        <p>Analysez la diversification de votre portefeuille</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>🎯 Objectifs d'Investissement</h4>
-                        <p>Définissez et suivez vos objectifs financiers</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
