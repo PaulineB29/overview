@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Gestion de la navigation entre écrans
 function setupNavigation() {
-    const navButtons = document.querySelectorAll('.nav-btn');
+    const navButtons = document.querySelectorAll('.nav-link-black'); 
     const screens = document.querySelectorAll('.screen');
 
     navButtons.forEach(button => {
