@@ -190,4 +190,287 @@ app.get('/', (req, res) => {
                 <table id="financialTable">
                     <thead>
                         <tr>
-                            <th data-column="id" class="sortable"><span>ID</span></th
+                            <th data-column="id" class="sortable"><span>ID</span></th>
+                            <th data-column="entreprise_id" class="sortable"><span>Entreprise ID</span></th>
+                            <th data-column="date_analyse" class="sortable"><span>Date Analyse</span></th>
+                            <th data-column="periode" class="sortable"><span>Période</span></th>
+                            <th data-column="roe" class="sortable"><span>ROE</span></th>
+                            <th data-column="netmargin" class="sortable"><span>Marge Nette</span></th>
+                            <th data-column="grossmargin" class="sortable"><span>Marge Brute</span></th>
+                            <th data-column="recommandation" class="sortable"><span>Recommandation</span></th>
+                            <th data-column="created_at" class="sortable"><span>Créé le</span></th>
+                            <th data-column="sgamargin" class="sortable"><span>Marge SGA</span></th>
+                            <th data-column="debttoequity" class="sortable"><span>Dette/Capitaux</span></th>
+                            <th data-column="currentratio" class="sortable"><span>Ratio Courant</span></th>
+                            <th data-column="interestcoverage" class="sortable"><span>Couverture Intérêts</span></th>
+                            <th data-column="peratio" class="sortable"><span>P/E Ratio</span></th>
+                            <th data-column="earningsyield" class="sortable"><span>Rendement</span></th>
+                            <th data-column="pricetofcf" class="sortable"><span>Price/FCF</span></th>
+                            <th data-column="pricetomm200" class="sortable"><span>Price/MM200</span></th>
+                            <th data-column="dividendyield" class="sortable"><span>Dividend Yield</span></th>
+                            <th data-column="pbratio" class="sortable"><span>P/B Ratio</span></th>
+                            <th data-column="pegratio" class="sortable"><span>PEG Ratio</span></th>
+                            <th data-column="roic" class="sortable"><span>ROIC</span></th>
+                            <th data-column="freecashflow" class="sortable"><span>Free Cash Flow</span></th>
+                            <th data-column="evtoebitda" class="sortable"><span>EV/EBITDA</span></th>
+                            <th data-column="score_global" class="sortable"><span>Score Global</span></th>
+                            <th data-column="points_forts" class="sortable"><span>Points Forts</span></th>
+                            <th data-column="points_faibles" class="sortable"><span>Points Faibles</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Les données seront chargées ici depuis la BDD -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-footer">
+                <span id="rowCount">0</span> résultats affichés
+                <span class="last-update" id="lastUpdate"></span>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentData = [];
+        let sortConfig = { key: null, direction: 'asc' };
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDataFromDB();
+            setupEventListeners();
+        });
+
+        async function loadDataFromDB() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/api/financial-data');
+                if (!response.ok) {
+                    throw new Error(\`Erreur HTTP: \${response.status}\`);
+                }
+                
+                const data = await response.json();
+                currentData = data;
+                displayData(currentData);
+                showError(null);
+                
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+                showError('Erreur de connexion à la base de données. Vérifiez que le serveur est correctement configuré.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function setupEventListeners() {
+            // Recherche globale
+            document.getElementById('globalSearch').addEventListener('input', function(e) {
+                filterData(e.target.value);
+            });
+
+            // Réinitialisation
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                document.getElementById('globalSearch').value = '';
+                displayData(currentData);
+            });
+
+            // Actualisation des données
+            document.getElementById('refreshData').addEventListener('click', function() {
+                loadDataFromDB();
+            });
+
+            // Tri des colonnes
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.addEventListener('click', function() {
+                    const column = this.dataset.column;
+                    sortData(column);
+                });
+            });
+        }
+
+        function displayData(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = \`
+                    <tr>
+                        <td colspan="26" style="text-align: center; padding: 40px; color: #64748b;">
+                            Aucune donnée trouvée
+                        </td>
+                    </tr>
+                \`;
+                updateRowCount(0);
+                return;
+            }
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = \`
+                    <td>\${item.id}</td>
+                    <td><strong>\${item.entreprise_id}</strong></td>
+                    <td>\${formatDate(item.date_analyse)}</td>
+                    <td>\${item.periode}</td>
+                    <td class="positive">\${formatPercentage(item.roe)}</td>
+                    <td class="positive">\${formatPercentage(item.netmargin)}</td>
+                    <td class="positive">\${formatPercentage(item.grossmargin)}</td>
+                    <td><span class="badge \${item.recommandation.toLowerCase()}">\${item.recommandation}</span></td>
+                    <td>\${formatDateTime(item.created_at)}</td>
+                    <td>\${formatPercentage(item.sgamargin)}</td>
+                    <td>\${formatNumber(item.debttoequity)}</td>
+                    <td class="positive">\${formatNumber(item.currentratio)}</td>
+                    <td class="positive">\${formatNumber(item.interestcoverage)}</td>
+                    <td>\${formatNumber(item.peratio)}</td>
+                    <td>\${formatPercentage(item.earningsyield)}</td>
+                    <td>\${formatNumber(item.pricetofcf)}</td>
+                    <td>\${formatNumber(item.pricetomm200)}</td>
+                    <td>\${formatPercentage(item.dividendyield)}</td>
+                    <td>\${formatNumber(item.pbratio)}</td>
+                    <td>\${formatNumber(item.pegratio)}</td>
+                    <td class="positive">\${formatPercentage(item.roic)}</td>
+                    <td class="positive">\${formatCurrency(item.freecashflow)}</td>
+                    <td>\${formatNumber(item.evtoebitda)}</td>
+                    <td><span class="\${getScoreClass(item.score_global)}">\${item.score_global}/100</span></td>
+                    <td title="\${item.points_forts}">\${truncateText(item.points_forts, 40)}</td>
+                    <td title="\${item.points_faibles}">\${truncateText(item.points_faibles, 40)}</td>
+                \`;
+                tbody.appendChild(row);
+            });
+
+            updateRowCount(data.length);
+            updateLastUpdate();
+        }
+
+        function filterData(searchTerm) {
+            if (!searchTerm) {
+                displayData(currentData);
+                return;
+            }
+
+            const term = searchTerm.toLowerCase();
+            const filteredData = currentData.filter(item => 
+                Object.values(item).some(value => 
+                    value !== null && value.toString().toLowerCase().includes(term)
+                )
+            );
+            displayData(filteredData);
+        }
+
+        function sortData(key) {
+            if (sortConfig.key === key) {
+                sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.key = key;
+                sortConfig.direction = 'asc';
+            }
+
+            const sortedData = [...currentData].sort((a, b) => {
+                let aValue = a[key];
+                let bValue = b[key];
+
+                // Gestion des valeurs null
+                if (aValue === null) aValue = sortConfig.direction === 'asc' ? -Infinity : Infinity;
+                if (bValue === null) bValue = sortConfig.direction === 'asc' ? -Infinity : Infinity;
+
+                if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            displayData(sortedData);
+        }
+
+        function updateRowCount(count) {
+            document.getElementById('rowCount').textContent = count;
+        }
+
+        function updateLastUpdate() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = \`Dernière mise à jour: \${now.toLocaleTimeString('fr-FR')}\`;
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.add('show');
+            } else {
+                loading.classList.remove('show');
+            }
+        }
+
+        function showError(message) {
+            const existingError = document.querySelector('.error');
+            if (existingError) {
+                existingError.remove();
+            }
+
+            if (message) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.innerHTML = \`
+                    ⚠️ \${message}
+                \`;
+                document.querySelector('.main-content').prepend(errorDiv);
+            }
+        }
+
+        function getScoreClass(score) {
+            if (score >= 80) return 'score-high';
+            if (score >= 60) return 'score-medium';
+            return 'score-low';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            return new Date(dateString).toLocaleDateString('fr-FR');
+        }
+
+        function formatDateTime(dateTimeString) {
+            if (!dateTimeString) return '-';
+            return new Date(dateTimeString).toLocaleString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatPercentage(value) {
+            if (value === null || value === undefined) return '-';
+            return \`\${value}%\`;
+        }
+
+        function formatNumber(value) {
+            if (value === null || value === undefined) return '-';
+            return value.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatCurrency(value) {
+            if (value === null || value === undefined) return '-';
+            if (value >= 1000000) {
+                return \`€\${(value / 1000000).toFixed(1)}M\`;
+            } else if (value >= 1000) {
+                return \`€\${(value / 1000).toFixed(1)}K\`;
+            }
+            return \`€\${value.toLocaleString('fr-FR')}\`;
+        }
+
+        function truncateText(text, maxLength) {
+            if (!text) return '-';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+    </script>
+</body>
+</html>
+    \`);
+});
+
+// Démarrer le serveur
+app.listen(port, () => {
+    console.log(\`🚀 Serveur démarré sur le port \${port}\`);
+    console.log(\`📊 Tableau disponible sur: http://localhost:\${port}\`);
+});
