@@ -426,3 +426,45 @@ tbody tr:hover {
 .table-container {
     margin: 10px 0;
     padding: 0;
+
+/* Style des boutons bleu et blanc */
+.btn {
+    background-color: #007bff; /* Bleu */
+    color: white;
+    border: 1px solid #007bff;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 32px;
+    margin: 0 5px;
+}
+
+/* Effet au survol */
+.btn:hover {
+    background-color: #0056b3; /* Bleu plus foncé */
+    border-color: #0056b3;
+}
+
+/* Effet au clic */
+.btn:active {
+    background-color: #004085;
+    transform: translateY(1px);
+}
+
+#globalSearch {
+    padding: 6px 10px;
+    font-size: 13px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    height: 32px;
+    margin: 0 5px;
+}
+
+/* Version compacte de la recherche */
+#globalSearch.small {
+    padding: 4px 8px;
+    font-size: 12px;
+    height: 28px;
+}
