@@ -19,11 +19,11 @@ const pool = new Pool({
 
 // Test de connexion à la base de données
 pool.on('connect', () => {
-  console.log('✅ Connecté à PostgreSQL');
+  console.log('[SUCCESS] Connecté à PostgreSQL');
 });
 
 pool.on('error', (err) => {
-  console.error('❌ Erreur de connexion PostgreSQL:', err);
+  console.error('[ERROR] Erreur de connexion PostgreSQL:', err);
 });
 
 // Route API
@@ -65,11 +65,11 @@ app.get('/api/financial-data', async (req, res) => {
         `;
 
         const result = await pool.query(query);
-        console.log(`✅ ${result.rows.length} enregistrements récupérés`);
+        console.log(`SUCCESS] ${result.rows.length} enregistrements récupérés`);
         res.json(result.rows);
         
     } catch (error) {
-        console.error('❌ Erreur:', error);
+        console.error('Erreur:', error);
         res.status(500).json({ error: 'Erreur base de données' });
     }
 });
@@ -81,5 +81,5 @@ app.get('/', (req, res) => {
 
 // Démarrer le serveur
 app.listen(port, () => {
-    console.log(`🚀 Serveur démarré sur le port ${port}`);
+    console.log(`Serveur démarré sur le port ${port}`);
 });
