@@ -435,13 +435,24 @@ body {
     padding: 20px;
 }
 
+/* CORRECTIONS POUR LA SECTION POSITIONS */
 .portfolio-section {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 30px;
-    margin-bottom: 30px;
-    border: 1px solid #f1f5f9;
+    position: relative;
+    overflow: visible;
+}
+
+#open-positions,
+#closed-positions {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Assurer que le tableau reste dans son conteneur */
+.portfolio-section .table-container {
+    max-height: 500px;
+    overflow: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
 }
 
 .section-header {
