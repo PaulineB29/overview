@@ -24,6 +24,10 @@ function setupNavigation() {
             // Active le bouton et l'écran sélectionné
             this.classList.add('active');
             document.getElementById(targetScreen).classList.add('active');
+
+            // Si on arrive sur le portefeuille, initialise les tabs
+            if (targetScreen === 'portfolio-tracker') {
+                setupPortfolioTabs();
         });
     });
 }
@@ -250,4 +254,24 @@ function formatCurrency(value) {
         return `€${(numberValue / 1000).toFixed(1)}K`;
     }
     return `€${numberValue.toFixed(0)}`;
+}
+
+// Gestion des tabs du portefeuille
+function setupPortfolioTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            
+            // Désactive tous les boutons et contenus
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Active le bouton et le contenu sélectionné
+            this.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+        });
+    });
 }
