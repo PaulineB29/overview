@@ -355,16 +355,34 @@ function formatCurrency(value) {
     return `€${numberValue.toFixed(0)}`;
 }
 
-// FONCTIONS POUR LES POSITIONS (NOUVELLES FONCTIONNALITÉS)
-function loadPositions() {
-    const positions = getLocalPositions();
-    currentPositions = positions;
-    displayPositions(currentPositions);
+// Charger les positions depuis la base de données
+async function loadPositionsFromDB() {
+    try {
+        const response = await fetch('https://overview-analyse.onrender.com/api/positions');
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        currentPositions = data;
+        displayPositions(currentPositions);
+        
+    } catch (error) {
+        console.error('Erreur lors du chargement des positions:', error);
+        // Fallback sur les données locales
+        displayPositions(getLocalPositions());
+    }
 }
 
-function addNewPosition(positionData) {
-    const positions = getLocalPositions();
-    const newPosition = {
+// Sauvegarder une nouvelle position
+async function addNewPosition(positionData) {
+    try {
+        const response = await fetch('https://overview-analyse.onrender.com/api/positions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
         id: Date.now(),
         entreprise_nom: positionData.companyName,
         entreprise_symbole: positionData.stockSymbol,
@@ -373,13 +391,33 @@ function addNewPosition(positionData) {
         date_achat: positionData.purchaseDate,
         statut: 'ouvert',
         date_ajout: new Date().toISOString()
-    };
-    
-    positions.push(newPosition);
-    localStorage.setItem('portfolioPositions', JSON.stringify(positions));
-    
-    // Recharger et afficher les positions
-    loadPositions();
+    })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        // Si l'API retourne un message de fallback, utiliser le localStorage
+        if (result.message && result.message.includes('non disponible')) {
+            savePositionLocally(positionData);
+            showNotification(`Position ${positionData.stockSymbol} ajoutée (mode local)`);
+        } else {
+            showNotification(`Position ${positionData.stockSymbol} ajoutée avec succès!`);
+        }
+        
+        // Recharger les positions
+        loadPositionsFromDB();
+        
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout de la position:', error);
+        // Fallback : sauvegarde locale
+        savePositionLocally(positionData);
+        showNotification(`Position ${positionData.stockSymbol} ajoutée (mode hors ligne)`);
+        loadPositionsFromDB();
+    }
 }
 
 function displayPositions(positions) {
