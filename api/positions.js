@@ -1,4 +1,5 @@
-const pool = require('../db');
+// api/positions.js
+const pool = require('../db'); // Assurez-vous que le chemin est correct
 
 // GET - Récupérer toutes les positions
 async function getPositions(req, res) {
