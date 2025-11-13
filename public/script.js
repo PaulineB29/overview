@@ -1,17 +1,36 @@
+// =============================================================================
+// VARIABLES GLOBALES
+// =============================================================================
 let currentData = [];
+let currentPositions = [];
 let sortConfig = { key: null, direction: 'asc' };
 
-// Initialisation
+// =============================================================================
+// INITIALISATION PRINCIPALE
+// =============================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    loadDataFromDB();
-    loadPositions();
-    setupEventListeners();
-    setupNavigation();
-    setupPortfolioTabs();
-    setupPositionModal(); 
+    initializeApp();
 });
 
-// Gestion de la navigation entre écrans
+function initializeApp() {
+    // Analyse financière
+    loadDataFromDB();
+    setupEventListeners();
+    
+    // Navigation et UI
+    setupNavigation();
+    
+    // Portefeuille
+    loadPositions();
+    setupPortfolioTabs();
+    setupPositionModal();
+    
+    console.log('✅ Application initialisée avec succès');
+}
+
+// =============================================================================
+// MODULE NAVIGATION
+// =============================================================================
 function setupNavigation() {
     const navButtons = document.querySelectorAll('.nav-link-black');
     const screens = document.querySelectorAll('.screen');
@@ -31,104 +50,9 @@ function setupNavigation() {
     });
 }
 
-// Gestion des tabs du portefeuille
-function setupPortfolioTabs() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const targetTab = this.dataset.tab;
-            
-            // Désactive tous les boutons et contenus
-            tabBtns.forEach(btn => btn.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-            
-            // Active le bouton et le contenu sélectionné
-            this.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
-        });
-    });
-    
-    // Initialiser le tri des tableaux
-    setupPositionsTableSorting();
-}
-
-// Gestion de la popup d'ajout de position
-function setupPositionModal() {
-    const modal = document.getElementById('addPositionModal');
-    const addBtn = document.getElementById('addPositionBtn');
-    const closeBtn = document.getElementById('closeModal');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const form = document.getElementById('addPositionForm');
-    
-    // Ouvrir la popup
-    addBtn.addEventListener('click', function() {
-        modal.classList.add('show');
-        document.getElementById('purchaseDate').valueAsDate = new Date(); // Date du jour par défaut
-    });
-    
-    // Fermer la popup
-    function closeModal() {
-        modal.classList.remove('show');
-        form.reset();
-    }
-    
-    closeBtn.addEventListener('click', closeModal);
-    cancelBtn.addEventListener('click', closeModal);
-    
-    // Fermer en cliquant en dehors
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-    
-    // Soumission du formulaire
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            companyName: document.getElementById('companyName').value,
-            stockSymbol: document.getElementById('stockSymbol').value.toUpperCase(),
-            purchasePrice: parseFloat(document.getElementById('purchasePrice').value),
-            quantity: parseInt(document.getElementById('quantity').value),
-            purchaseDate: document.getElementById('purchaseDate').value
-        };
-        
-        // Ici vous pouvez ajouter la logique pour sauvegarder la position
-        addNewPosition(formData);
-        closeModal();
-        
-        // Message de confirmation
-        showNotification(`Position ${formData.stockSymbol} ajoutée avec succès!`);
-    });
-    
-    // Auto-remplir le symbole si on saisit un nom connu
-    document.getElementById('companyName').addEventListener('blur', function() {
-        const companyName = this.value.toLowerCase();
-        const symbolField = document.getElementById('stockSymbol');
-        
-        // Quelques exemples de correspondances
-        const companies = {
-            'apple': 'AAPL',
-            'microsoft': 'MSFT',
-            'tesla': 'TSLA',
-            'google': 'GOOGL',
-            'amazon': 'AMZN',
-            'nvidia': 'NVDA',
-            'meta': 'META'
-        };
-        
-        for (const [key, value] of Object.entries(companies)) {
-            if (companyName.includes(key)) {
-                symbolField.value = value;
-                break;
-            }
-        }
-    });
-}
-
+// =============================================================================
+// MODULE ANALYSE FINANCIÈRE
+// =============================================================================
 async function loadDataFromDB() {
     showLoading(true);
     
@@ -153,20 +77,29 @@ async function loadDataFromDB() {
 
 function setupEventListeners() {
     // Recherche globale
-    document.getElementById('globalSearch').addEventListener('input', function(e) {
-        filterData(e.target.value);
-    });
+    const globalSearch = document.getElementById('globalSearch');
+    if (globalSearch) {
+        globalSearch.addEventListener('input', function(e) {
+            filterData(e.target.value);
+        });
+    }
 
     // Réinitialisation
-    document.getElementById('resetFilters').addEventListener('click', function() {
-        document.getElementById('globalSearch').value = '';
-        displayData(currentData);
-    });
+    const resetFilters = document.getElementById('resetFilters');
+    if (resetFilters) {
+        resetFilters.addEventListener('click', function() {
+            if (globalSearch) globalSearch.value = '';
+            displayData(currentData);
+        });
+    }
 
     // Actualisation des données
-    document.getElementById('refreshData').addEventListener('click', function() {
-        loadDataFromDB();
-    });
+    const refreshData = document.getElementById('refreshData');
+    if (refreshData) {
+        refreshData.addEventListener('click', function() {
+            loadDataFromDB();
+        });
+    }
 
     // Tri des colonnes
     document.querySelectorAll('th.sortable').forEach(th => {
@@ -179,7 +112,7 @@ function setupEventListeners() {
 
 function displayData(data) {
     const tbody = document.getElementById('tableBody');
-    if (!tbody) return; // Protection si l'élément n'existe pas
+    if (!tbody) return;
     
     tbody.innerHTML = '';
 
@@ -229,23 +162,6 @@ function displayData(data) {
     updateLastUpdate();
 }
 
-function getColorClass(value, type) {
-    if (value === null || value === undefined) return '';
-    
-    const numValue = parseFloat(value);
-    if (isNaN(numValue)) return '';
-    
-    if (type === 'high') {
-        if (numValue > 0) return 'positive';
-        if (numValue < 0) return 'negative';
-    } else if (type === 'low') {
-        if (numValue < 0) return 'positive';
-        if (numValue > 0) return 'negative';
-    }
-    
-    return '';
-}
-
 function filterData(searchTerm) {
     if (!searchTerm) {
         displayData(currentData);
@@ -285,78 +201,91 @@ function sortData(key) {
     displayData(sortedData);
 }
 
-function updateRowCount(count) {
-    document.getElementById('rowCount').textContent = count;
-}
+// =============================================================================
+// MODULE PORTEFEUILLE - POSITIONS
+// =============================================================================
+function setupPortfolioTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-function updateLastUpdate() {
-    const now = new Date();
-    document.getElementById('lastUpdate').textContent = `Dernière mise à jour: ${now.toLocaleTimeString('fr-FR')}`;
-}
-
-function showLoading(show) {
-    const loading = document.getElementById('loading');
-    if (show) {
-        loading.classList.add('show');
-    } else {
-        loading.classList.remove('show');
-    }
-}
-
-function showError(message) {
-    const existingError = document.querySelector('.error');
-    if (existingError) {
-        existingError.remove();
-    }
-
-    if (message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error';
-        errorDiv.innerHTML = `
-            ⚠️ ${message}
-        `;
-        document.querySelector('.main-content').prepend(errorDiv);
-    }
-}
-
-function formatDate(dateString) {
-    if (!dateString) return '-';
-    return new Date(dateString).toLocaleDateString('fr-FR');
-}
-
-function formatPercentage(value) {
-    if (value === null || value === undefined) return '-';
-    try {
-        const numberValue = parseFloat(value);
-        if (isNaN(numberValue)) return '-';
-        return `${numberValue.toFixed(2)}%`;
-    } catch (error) {
-        return '-';
-    }
-}
-
-function formatNumber(value) {
-    if (value === null || value === undefined) return '-';
-    const numberValue = parseFloat(value);
-    if (isNaN(numberValue)) return '-';
-    return numberValue.toFixed(2);
-}
-
-function formatCurrency(value) {
-    if (value === null || value === undefined) return '-';
-    const numberValue = parseFloat(value);
-    if (isNaN(numberValue)) return '-';
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            this.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+        });
+    });
     
-    if (numberValue >= 1000000) {
-        return `€${(numberValue / 1000000).toFixed(1)}M`;
-    } else if (numberValue >= 1000) {
-        return `€${(numberValue / 1000).toFixed(1)}K`;
-    }
-    return `€${numberValue.toFixed(0)}`;
+    setupPositionsTableSorting();
 }
 
-// Charger les positions depuis la base de données
-async function loadPositionsFromDB() {
+function setupPositionModal() {
+    const modal = document.getElementById('addPositionModal');
+    const addBtn = document.getElementById('addPositionBtn');
+    const closeBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const form = document.getElementById('addPositionForm');
+    
+    if (!modal || !addBtn) return;
+    
+    addBtn.addEventListener('click', function() {
+        modal.classList.add('show');
+        document.getElementById('purchaseDate').valueAsDate = new Date();
+    });
+    
+    function closeModal() {
+        modal.classList.remove('show');
+        form.reset();
+    }
+    
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            companyName: document.getElementById('companyName').value,
+            stockSymbol: document.getElementById('stockSymbol').value.toUpperCase(),
+            purchasePrice: parseFloat(document.getElementById('purchasePrice').value),
+            quantity: parseInt(document.getElementById('quantity').value),
+            purchaseDate: document.getElementById('purchaseDate').value
+        };
+        
+        addNewPosition(formData);
+        closeModal();
+        showNotification(`Position ${formData.stockSymbol} ajoutée avec succès!`);
+    });
+    
+    document.getElementById('companyName').addEventListener('blur', function() {
+        const companyName = this.value.toLowerCase();
+        const symbolField = document.getElementById('stockSymbol');
+        
+        const companies = {
+            'apple': 'AAPL', 'microsoft': 'MSFT', 'tesla': 'TSLA',
+            'google': 'GOOGL', 'amazon': 'AMZN', 'nvidia': 'NVDA', 'meta': 'META'
+        };
+        
+        for (const [key, value] of Object.entries(companies)) {
+            if (companyName.includes(key)) {
+                symbolField.value = value;
+                break;
+            }
+        }
+    });
+}
+
+async function loadPositions() {
     try {
         const response = await fetch('https://overview-analyse.onrender.com/api/positions');
         if (!response.ok) {
@@ -369,12 +298,10 @@ async function loadPositionsFromDB() {
         
     } catch (error) {
         console.error('Erreur lors du chargement des positions:', error);
-        // Fallback sur les données locales
         displayPositions(getLocalPositions());
     }
 }
 
-// Sauvegarder une nouvelle position
 async function addNewPosition(positionData) {
     try {
         const response = await fetch('https://overview-analyse.onrender.com/api/positions', {
@@ -383,15 +310,12 @@ async function addNewPosition(positionData) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-        id: Date.now(),
-        entreprise_nom: positionData.companyName,
-        entreprise_symbole: positionData.stockSymbol,
-        prix_achat: positionData.purchasePrice,
-        quantite: positionData.quantity,
-        date_achat: positionData.purchaseDate,
-        statut: 'ouvert',
-        date_ajout: new Date().toISOString()
-    })
+                entreprise_nom: positionData.companyName,
+                entreprise_symbole: positionData.stockSymbol,
+                prix_achat: positionData.purchasePrice,
+                quantite: positionData.quantity,
+                date_achat: positionData.purchaseDate
+            })
         });
 
         if (!response.ok) {
@@ -400,7 +324,6 @@ async function addNewPosition(positionData) {
 
         const result = await response.json();
         
-        // Si l'API retourne un message de fallback, utiliser le localStorage
         if (result.message && result.message.includes('non disponible')) {
             savePositionLocally(positionData);
             showNotification(`Position ${positionData.stockSymbol} ajoutée (mode local)`);
@@ -408,15 +331,13 @@ async function addNewPosition(positionData) {
             showNotification(`Position ${positionData.stockSymbol} ajoutée avec succès!`);
         }
         
-        // Recharger les positions
-        loadPositionsFromDB();
+        loadPositions();
         
     } catch (error) {
         console.error('Erreur lors de l\'ajout de la position:', error);
-        // Fallback : sauvegarde locale
         savePositionLocally(positionData);
         showNotification(`Position ${positionData.stockSymbol} ajoutée (mode hors ligne)`);
-        loadPositionsFromDB();
+        loadPositions();
     }
 }
 
@@ -426,7 +347,6 @@ function displayPositions(positions) {
     
     if (!openPositionsTable || !closedPositionsTable) return;
     
-    // Vider les tableaux
     openPositionsTable.innerHTML = '';
     closedPositionsTable.innerHTML = '';
     
@@ -490,12 +410,130 @@ function displayPositions(positions) {
     });
 }
 
+// =============================================================================
+// MODULE UTILITAIRES
+// =============================================================================
+function getColorClass(value, type) {
+    if (value === null || value === undefined) return '';
+    
+    const numValue = parseFloat(value);
+    if (isNaN(numValue)) return '';
+    
+    if (type === 'high') {
+        if (numValue > 0) return 'positive';
+        if (numValue < 0) return 'negative';
+    } else if (type === 'low') {
+        if (numValue < 0) return 'positive';
+        if (numValue > 0) return 'negative';
+    }
+    
+    return '';
+}
+
+function updateRowCount(count) {
+    const rowCountElement = document.getElementById('rowCount');
+    if (rowCountElement) {
+        rowCountElement.textContent = count;
+    }
+}
+
+function updateLastUpdate() {
+    const now = new Date();
+    const lastUpdateElement = document.getElementById('lastUpdate');
+    if (lastUpdateElement) {
+        lastUpdateElement.textContent = `Dernière mise à jour: ${now.toLocaleTimeString('fr-FR')}`;
+    }
+}
+
+function showLoading(show) {
+    const loading = document.getElementById('loading');
+    if (loading) {
+        if (show) {
+            loading.classList.add('show');
+        } else {
+            loading.classList.remove('show');
+        }
+    }
+}
+
+function showError(message) {
+    const existingError = document.querySelector('.error');
+    if (existingError) {
+        existingError.remove();
+    }
+
+    if (message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error';
+        errorDiv.innerHTML = `⚠️ ${message}`;
+        
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.prepend(errorDiv);
+        }
+    }
+}
+
+function formatDate(dateString) {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString('fr-FR');
+}
+
+function formatPercentage(value) {
+    if (value === null || value === undefined) return '-';
+    try {
+        const numberValue = parseFloat(value);
+        if (isNaN(numberValue)) return '-';
+        return `${numberValue.toFixed(2)}%`;
+    } catch (error) {
+        return '-';
+    }
+}
+
+function formatNumber(value) {
+    if (value === null || value === undefined) return '-';
+    const numberValue = parseFloat(value);
+    if (isNaN(numberValue)) return '-';
+    return numberValue.toFixed(2);
+}
+
+function formatCurrency(value) {
+    if (value === null || value === undefined) return '-';
+    const numberValue = parseFloat(value);
+    if (isNaN(numberValue)) return '-';
+    
+    if (numberValue >= 1000000) {
+        return `€${(numberValue / 1000000).toFixed(1)}M`;
+    } else if (numberValue >= 1000) {
+        return `€${(numberValue / 1000).toFixed(1)}K`;
+    }
+    return `€${numberValue.toFixed(0)}`;
+}
+
+// =============================================================================
+// UTILITAIRES PORTEFEUILLE
+// =============================================================================
 function getLocalPositions() {
     return JSON.parse(localStorage.getItem('portfolioPositions')) || [];
 }
 
+function savePositionLocally(positionData) {
+    const positions = getLocalPositions();
+    const newPosition = {
+        id: Date.now(),
+        entreprise_nom: positionData.companyName,
+        entreprise_symbole: positionData.stockSymbol,
+        prix_achat: positionData.purchasePrice,
+        quantite: positionData.quantity,
+        date_achat: positionData.purchaseDate,
+        statut: 'ouvert',
+        date_ajout: new Date().toISOString()
+    };
+    positions.push(newPosition);
+    localStorage.setItem('portfolioPositions', JSON.stringify(positions));
+}
+
 function getCurrentPrice(symbol) {
-    // Prix fictifs pour la démo
     const mockPrices = {
         'AAPL': 171.80, 'MSFT': 321.80, 'TSLA': 199.10,
         'GOOGL': 142.50, 'NVDA': 555.00, 'AMZN': 146.50, 'META': 298.25
@@ -510,7 +548,6 @@ function calculateDuration(startDate, endDate) {
     return `${months} mois`;
 }
 
-// Tri des colonnes du tableau des positions
 function setupPositionsTableSorting() {
     document.querySelectorAll('.positions-table th.sortable').forEach(th => {
         th.addEventListener('click', function() {
@@ -522,18 +559,17 @@ function setupPositionsTableSorting() {
         });
     });
 }
+
 function sortTable(table, column, isNumeric) {
     const tbody = table.querySelector('tbody');
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const header = table.querySelector(`th[data-column="${column}"]`);
     const isAscending = !header.classList.contains('asc');
     
-    // Reset other headers
     table.querySelectorAll('th').forEach(th => {
         th.classList.remove('asc', 'desc');
     });
     
-    // Set current header
     header.classList.add(isAscending ? 'asc' : 'desc');
     
     rows.sort((a, b) => {
@@ -541,7 +577,6 @@ function sortTable(table, column, isNumeric) {
         let bValue = b.querySelector(`td:nth-child(${getColumnIndex(header)})`).textContent;
         
         if (isNumeric) {
-            // Extraire les nombres des chaînes (pour les gains/pertes)
             aValue = extractNumber(aValue);
             bValue = extractNumber(bValue);
         }
@@ -551,7 +586,6 @@ function sortTable(table, column, isNumeric) {
         return 0;
     });
     
-    // Réorganiser les rows
     rows.forEach(row => tbody.appendChild(row));
 }
 
@@ -564,9 +598,7 @@ function extractNumber(str) {
     return match ? parseFloat(match[1].replace(',', '.')) : 0;
 }
 
-
 function showNotification(message) {
-    // Créer une notification temporaire
     const notification = document.createElement('div');
     notification.className = 'notification';
     notification.innerHTML = `
@@ -576,7 +608,6 @@ function showNotification(message) {
         </div>
     `;
     
-    // Styles pour la notification
     notification.style.cssText = `
         position: fixed;
         top: 100px;
@@ -592,14 +623,13 @@ function showNotification(message) {
     
     document.body.appendChild(notification);
     
-    // Supprimer après 3 secondes
     setTimeout(() => {
         notification.style.animation = 'slideOutRight 0.3s ease';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
-// Ajouter ces keyframes pour l'animation de notification
+// Styles pour les notifications
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideInRight {
