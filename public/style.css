@@ -524,9 +524,13 @@ tbody tr:hover {
 /* Gestion des écrans */
 .screen {
     display: none;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    position: absolute;
+    top: 50px; /* Hauteur du bandeau */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    overflow-y: auto;
 }
 
 .screen.active {
@@ -576,37 +580,37 @@ tbody tr:hover {
     font-size: 0.9rem;
     margin: 0;
 }
-/* Bandeau Investing.com style */
+/* Bandeau fixe en haut */
 .top-nav-black {
-    background: #1a1a1a;
+    background: #000000;
     color: white;
     padding: 0;
-    position: sticky;
+    position: fixed; /* Changé de sticky à fixed */
     top: 0;
-    z-index: 100;
+    left: 0;
+    right: 0;
+    z-index: 1000;
     font-family: Arial, sans-serif;
     border-bottom: 1px solid #333;
+    height: 50px;
 }
 
 .nav-container-black {
     display: flex;
     align-items: center;
-    max-width: 100%;
-    margin: 0 auto;
     padding: 0 20px;
-    height: 45px;
+    height: 100%;
+    max-width: 100%;
 }
 
 .nav-brand-black {
     font-weight: bold;
     font-size: 16px;
     color: #fff;
-    margin-right: 25px;
 }
 
 .nav-title {
     color: #fff;
-    font-weight: 600;
 }
 
 .nav-separator {
@@ -618,7 +622,6 @@ tbody tr:hover {
 .nav-menu-black {
     display: flex;
     align-items: center;
-    flex-grow: 1;
 }
 
 .nav-link-black {
@@ -626,72 +629,46 @@ tbody tr:hover {
     border: none;
     color: #cccccc;
     cursor: pointer;
-    font-size: 13px;
-    padding: 12px 15px;
-    transition: all 0.2s ease;
+    font-size: 14px;
+    padding: 8px 16px;
+    transition: color 0.2s ease;
     font-family: inherit;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid transparent;
 }
-
-.nav-link-black:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+    .nav-link-black:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link-black.active {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.1);
-    border-bottom: 2px solid #00bfff;
-}
-    
-* Effet de séparation subtil entre les éléments */
-.nav-menu-black::before {
-    content: '';
-    flex-grow: 1;
+    color: white;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.15);
 }
 
-/* Style spécifique pour correspondre à Investing.com */
-.nav-container-black {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-}
-
-.nav-link-black {
-    position: relative;
-}
-
-.nav-link-black:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 15px;
-    width: 1px;
-    background: #444;
-}
-
-/* Ajustement du contenu principal */
+/* Ajustement du body pour le bandeau fixe */
 body {
     margin: 0;
     padding: 0;
-    background: #f8f9fa;
+    padding-top: 50px; /* Compensation pour le bandeau fixe */
 }
 
+/* Contenu principal prend toute la hauteur disponible */
 .main-content {
-    padding-top: 0;
-}
-
-/* Style pour le contenu des écrans */
-.screen {
-    display: none;
+    min-height: calc(100vh - 50px);
     padding: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
 }
 
-.screen.active {
-    display: block;
+/* Style spécifique pour l'écran Portfolio Builder vide */
+#portfolio-builder .main-content {
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#portfolio-builder .main-content:empty::before {
+    content: "Portfolio Builder - Page en construction";
+    color: #999;
+    font-size: 20px;
+    font-style: italic;
 }
