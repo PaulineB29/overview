@@ -83,12 +83,325 @@
     </div>
     
 
+<!-- Écran Suivi Portefeuille -->
     <div id="portfolio-tracker" class="screen">
-        <div class="main-content">
-            <div style="padding: 40px; text-align: center; color: #666;">
-                <h2>Suivi Portefeuille</h2>
-                <p>Cette fonctionnalité sera disponible prochainement</p>
-            </div>
+        <div class="portfolio-container">
+            <!-- Section Évolution du Portefeuille -->
+            <section class="portfolio-section">
+                <div class="section-header">
+                    <h2>📈 Évolution du Portefeuille</h2>
+                    <div class="portfolio-stats">
+                        <div class="stat-card">
+                            <div class="stat-label">Valeur Totale</div>
+                            <div class="stat-value positive">€125,430</div>
+                            <div class="stat-change positive">+12.5%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Performance Jour</div>
+                            <div class="stat-value positive">€2,150</div>
+                            <div class="stat-change positive">+1.75%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Performance Mois</div>
+                            <div class="stat-value positive">€8,420</div>
+                            <div class="stat-change positive">+7.2%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Dividendes</div>
+                            <div class="stat-value">€3,250</div>
+                            <div class="stat-change">YTD</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-placeholder">
+                        <div class="chart-mock">
+                            <!-- Simulation de graphique -->
+                            <div class="chart-line" style="height: 60%; left: 10%;"></div>
+                            <div class="chart-line" style="height: 45%; left: 20%;"></div>
+                            <div class="chart-line" style="height: 70%; left: 30%;"></div>
+                            <div class="chart-line" style="height: 55%; left: 40%;"></div>
+                            <div class="chart-line" style="height: 80%; left: 50%;"></div>
+                            <div class="chart-line" style="height: 75%; left: 60%;"></div>
+                            <div class="chart-line" style="height: 90%; left: 70%;"></div>
+                            <div class="chart-line" style="height: 85%; left: 80%;"></div>
+                            <div class="chart-line" style="height: 95%; left: 90%;"></div>
+                        </div>
+                        <p class="chart-note">Graphique d'évolution - Intégration prochaine</p>
+                    </div>
+                </div>
+
+                <div class="allocation-grid">
+                    <div class="allocation-card">
+                        <h3>🔄 Répartition par Secteur</h3>
+                        <div class="allocation-list">
+                            <div class="allocation-item">
+                                <span class="sector-name">Technologie</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 35%; background: #3b82f6;"></div>
+                                </div>
+                                <span class="allocation-percent">35%</span>
+                            </div>
+                            <div class="allocation-item">
+                                <span class="sector-name">Santé</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 25%; background: #10b981;"></div>
+                                </div>
+                                <span class="allocation-percent">25%</span>
+                            </div>
+                            <div class="allocation-item">
+                                <span class="sector-name">Finance</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 20%; background: #f59e0b;"></div>
+                                </div>
+                                <span class="allocation-percent">20%</span>
+                            </div>
+                            <div class="allocation-item">
+                                <span class="sector-name">Énergie</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 15%; background: #ef4444;"></div>
+                                </div>
+                                <span class="allocation-percent">15%</span>
+                            </div>
+                            <div class="allocation-item">
+                                <span class="sector-name">Divers</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 5%; background: #8b5cf6;"></div>
+                                </div>
+                                <span class="allocation-percent">5%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="allocation-card">
+                        <h3>🌍 Répartition Géographique</h3>
+                        <div class="allocation-list">
+                            <div class="allocation-item">
+                                <span class="sector-name">Europe</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 45%; background: #6366f1;"></div>
+                                </div>
+                                <span class="allocation-percent">45%</span>
+                            </div>
+                            <div class="allocation-item">
+                                <span class="sector-name">Amérique Nord</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 35%; background: #ec4899;"></div>
+                                </div>
+                                <span class="allocation-percent">35%</span>
+                            </div>
+                            <div class="allocation-item">
+                                <span class="sector-name">Asie</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 15%; background: #f59e0b;"></div>
+                                </div>
+                                <span class="allocation-percent">15%</span>
+                            </div>
+                            <div class="allocation-item">
+                                <span class="sector-name">Autres</span>
+                                <div class="allocation-bar">
+                                    <div class="bar-fill" style="width: 5%; background: #6b7280;"></div>
+                                </div>
+                                <span class="allocation-percent">5%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Positions Ouvertes/Fermées -->
+            <section class="portfolio-section">
+                <div class="section-header">
+                    <h2>💼 Positions</h2>
+                    <div class="position-tabs">
+                        <button class="tab-btn active" data-tab="open-positions">Positions Ouvertes</button>
+                        <button class="tab-btn" data-tab="closed-positions">Positions Fermées</button>
+                    </div>
+                </div>
+
+                <!-- Positions Ouvertes -->
+                <div id="open-positions" class="tab-content active">
+                    <div class="positions-grid">
+                        <div class="position-card">
+                            <div class="position-header">
+                                <div class="stock-info">
+                                    <span class="stock-symbol">AAPL</span>
+                                    <span class="stock-name">Apple Inc.</span>
+                                </div>
+                                <div class="position-badge positive">+18.3%</div>
+                            </div>
+                            <div class="position-details">
+                                <div class="detail-row">
+                                    <span>Quantité:</span>
+                                    <span>25 actions</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Prix Moyen:</span>
+                                    <span>€145.20</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Valeur Actuelle:</span>
+                                    <span class="positive">€171.80</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Investissement:</span>
+                                    <span>€3,630</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Valeur Actuelle:</span>
+                                    <span>€4,295</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Plus-value:</span>
+                                    <span class="positive">€665</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="position-card">
+                            <div class="position-header">
+                                <div class="stock-info">
+                                    <span class="stock-symbol">MSFT</span>
+                                    <span class="stock-name">Microsoft</span>
+                                </div>
+                                <div class="position-badge positive">+12.7%</div>
+                            </div>
+                            <div class="position-details">
+                                <div class="detail-row">
+                                    <span>Quantité:</span>
+                                    <span>15 actions</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Prix Moyen:</span>
+                                    <span>€285.50</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Valeur Actuelle:</span>
+                                    <span class="positive">€321.80</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Investissement:</span>
+                                    <span>€4,282</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Valeur Actuelle:</span>
+                                    <span>€4,827</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Plus-value:</span>
+                                    <span class="positive">€545</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="position-card">
+                            <div class="position-header">
+                                <div class="stock-info">
+                                    <span class="stock-symbol">TSLA</span>
+                                    <span class="stock-name">Tesla Inc.</span>
+                                </div>
+                                <div class="position-badge negative">-5.2%</div>
+                            </div>
+                            <div class="position-details">
+                                <div class="detail-row">
+                                    <span>Quantité:</span>
+                                    <span>10 actions</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Prix Moyen:</span>
+                                    <span>€210.00</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Valeur Actuelle:</span>
+                                    <span class="negative">€199.10</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Investissement:</span>
+                                    <span>€2,100</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Valeur Actuelle:</span>
+                                    <span>€1,991</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Plus-value:</span>
+                                    <span class="negative">-€109</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Positions Fermées -->
+                <div id="closed-positions" class="tab-content">
+                    <div class="positions-grid">
+                        <div class="position-card">
+                            <div class="position-header">
+                                <div class="stock-info">
+                                    <span class="stock-symbol">NVDA</span>
+                                    <span class="stock-name">NVIDIA Corp.</span>
+                                </div>
+                                <div class="position-badge positive">+32.1%</div>
+                            </div>
+                            <div class="position-details">
+                                <div class="detail-row">
+                                    <span>Quantité:</span>
+                                    <span>8 actions</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Prix Achat:</span>
+                                    <span>€420.00</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Prix Vente:</span>
+                                    <span>€555.00</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Durée:</span>
+                                    <span>4 mois</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Plus-value:</span>
+                                    <span class="positive">€1,080</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="position-card">
+                            <div class="position-header">
+                                <div class="stock-info">
+                                    <span class="stock-symbol">AMZN</span>
+                                    <span class="stock-name">Amazon.com</span>
+                                </div>
+                                <div class="position-badge positive">+8.5%</div>
+                            </div>
+                            <div class="position-details">
+                                <div class="detail-row">
+                                    <span>Quantité:</span>
+                                    <span>5 actions</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Prix Achat:</span>
+                                    <span>€135.00</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Prix Vente:</span>
+                                    <span>€146.50</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Durée:</span>
+                                    <span>6 mois</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Plus-value:</span>
+                                    <span class="positive">€57.50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
