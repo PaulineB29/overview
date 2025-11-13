@@ -47,6 +47,9 @@ function setupPortfolioTabs() {
             document.getElementById(targetTab).classList.add('active');
         });
     });
+    
+    // Initialiser le tri des tableaux
+    setupPositionsTableSorting();
 }
 
 async function loadDataFromDB() {
@@ -273,4 +276,58 @@ function formatCurrency(value) {
         return `€${(numberValue / 1000).toFixed(1)}K`;
     }
     return `€${numberValue.toFixed(0)}`;
+}
+
+// Tri des colonnes du tableau des positions
+function setupPositionsTableSorting() {
+    document.querySelectorAll('.positions-table th.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+            const table = this.closest('table');
+            const column = this.dataset.column;
+            const isNumeric = ['prix', 'quantite', 'valeur', 'prixAchat', 'gains', 'prixVente'].includes(column);
+            
+            sortTable(table, column, isNumeric);
+        });
+    });
+}
+function sortTable(table, column, isNumeric) {
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const header = table.querySelector(`th[data-column="${column}"]`);
+    const isAscending = !header.classList.contains('asc');
+    
+    // Reset other headers
+    table.querySelectorAll('th').forEach(th => {
+        th.classList.remove('asc', 'desc');
+    });
+    
+    // Set current header
+    header.classList.add(isAscending ? 'asc' : 'desc');
+    
+    rows.sort((a, b) => {
+        let aValue = a.querySelector(`td:nth-child(${getColumnIndex(header)})`).textContent;
+        let bValue = b.querySelector(`td:nth-child(${getColumnIndex(header)})`).textContent;
+        
+        if (isNumeric) {
+            // Extraire les nombres des chaînes (pour les gains/pertes)
+            aValue = extractNumber(aValue);
+            bValue = extractNumber(bValue);
+        }
+        
+        if (aValue < bValue) return isAscending ? -1 : 1;
+        if (aValue > bValue) return isAscending ? 1 : -1;
+        return 0;
+    });
+    
+    // Réorganiser les rows
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function getColumnIndex(header) {
+    return Array.from(header.parentNode.children).indexOf(header) + 1;
+}
+
+function extractNumber(str) {
+    const match = str.match(/[-+]?€?([0-9]*[.,]?[0-9]+)/);
+    return match ? parseFloat(match[1].replace(',', '.')) : 0;
 }
