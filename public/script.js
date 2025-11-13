@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     setupNavigation();
     setupPortfolioTabs();
+    setupPositionModal(); 
 });
 
 // Gestion de la navigation entre écrans
@@ -331,3 +332,150 @@ function extractNumber(str) {
     const match = str.match(/[-+]?€?([0-9]*[.,]?[0-9]+)/);
     return match ? parseFloat(match[1].replace(',', '.')) : 0;
 }
+// Gestion de la popup d'ajout de position
+function setupPositionModal() {
+    const modal = document.getElementById('addPositionModal');
+    const addBtn = document.getElementById('addPositionBtn');
+    const closeBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const form = document.getElementById('addPositionForm');
+    
+    // Ouvrir la popup
+    addBtn.addEventListener('click', function() {
+        modal.classList.add('show');
+        document.getElementById('purchaseDate').valueAsDate = new Date(); // Date du jour par défaut
+    });
+    
+    // Fermer la popup
+    function closeModal() {
+        modal.classList.remove('show');
+        form.reset();
+    }
+    
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    
+    // Fermer en cliquant en dehors
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // Soumission du formulaire
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            companyName: document.getElementById('companyName').value,
+            stockSymbol: document.getElementById('stockSymbol').value.toUpperCase(),
+            purchasePrice: parseFloat(document.getElementById('purchasePrice').value),
+            quantity: parseInt(document.getElementById('quantity').value),
+            purchaseDate: document.getElementById('purchaseDate').value
+        };
+        
+        // Ici vous pouvez ajouter la logique pour sauvegarder la position
+        addNewPosition(formData);
+        closeModal();
+        
+        // Message de confirmation
+        showNotification(`Position ${formData.stockSymbol} ajoutée avec succès!`);
+    });
+    
+    // Auto-remplir le symbole si on saisit un nom connu
+    document.getElementById('companyName').addEventListener('blur', function() {
+        const companyName = this.value.toLowerCase();
+        const symbolField = document.getElementById('stockSymbol');
+        
+        // Quelques exemples de correspondances
+        const companies = {
+            'apple': 'AAPL',
+            'microsoft': 'MSFT',
+            'tesla': 'TSLA',
+            'google': 'GOOGL',
+            'amazon': 'AMZN',
+            'nvidia': 'NVDA',
+            'meta': 'META'
+        };
+        
+        for (const [key, value] of Object.entries(companies)) {
+            if (companyName.includes(key)) {
+                symbolField.value = value;
+                break;
+            }
+        }
+    });
+}
+
+function addNewPosition(positionData) {
+    // Cette fonction ajoute la nouvelle position à votre tableau
+    // Pour l'instant, on va juste afficher dans la console
+    console.log('Nouvelle position ajoutée:', positionData);
+    
+    // Ici vous devrez intégrer avec votre système de stockage
+    // Par exemple :
+    // - Ajouter à currentData
+    // - Sauvegarder dans localStorage ou envoyer à votre API
+    // - Re-afficher le tableau
+}
+
+function showNotification(message) {
+    // Créer une notification temporaire
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span>✅</span>
+            ${message}
+        </div>
+    `;
+    
+    // Styles pour la notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 1001;
+        animation: slideInRight 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Supprimer après 3 secondes
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Ajouter ces keyframes pour l'animation de notification
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
