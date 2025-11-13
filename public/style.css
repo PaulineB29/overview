@@ -433,19 +433,19 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    min-height: auto;
 }
 
-/* CORRECTIONS POUR LA SECTION POSITIONS */
 .portfolio-section {
-    position: relative;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid #f1f5f9;
     overflow: visible;
 }
 
-#open-positions,
-#closed-positions {
-    max-height: 600px;
-    overflow-y: auto;
-}
 
 /* Assurer que le tableau reste dans son conteneur */
 .portfolio-section .table-container {
@@ -453,7 +453,75 @@ body {
     overflow: auto;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
+    margin-top: 20px;
 }
+
+/* Ajustement de la largeur du tableau positions */
+.positions-table {
+    width: 100%;
+    min-width: 700px; /* Réduit de 800px à 700px */
+    margin-bottom: 0;
+}
+
+/* Header fixe pour les tableaux positions */
+.positions-table thead th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    z-index: 10;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+/* Ajustement des colonnes pour mieux tenir */
+.positions-table th:nth-child(1), /* Nom Entreprise */
+.positions-table td:nth-child(1) {
+    min-width: 180px;
+    max-width: 200px;
+}
+
+.positions-table th:nth-child(2), /* Symbole */
+.positions-table td:nth-child(2) {
+    min-width: 80px;
+    max-width: 100px;
+}
+
+.positions-table th:nth-child(3), /* Prix */
+.positions-table td:nth-child(3),
+.positions-table th:nth-child(4), /* Quantité */
+.positions-table td:nth-child(4),
+.positions-table th:nth-child(5), /* Valeur Totale */
+.positions-table td:nth-child(5),
+.positions-table th:nth-child(6), /* Prix Achat */
+.positions-table td:nth-child(6) {
+    min-width: 100px;
+    max-width: 120px;
+}
+
+.positions-table th:nth-child(7), /* Gains/Pertes */
+.positions-table td:nth-child(7) {
+    min-width: 140px;
+    max-width: 160px;
+}
+
+/* Pour le tableau positions fermées */
+#closed-positions .positions-table th:nth-child(3), /* Prix Achat */
+#closed-positions .positions-table td:nth-child(3),
+#closed-positions .positions-table th:nth-child(4), /* Prix Vente */
+#closed-positions .positions-table td:nth-child(4),
+#closed-positions .positions-table th:nth-child(5), /* Quantité */
+#closed-positions .positions-table td:nth-child(5),
+#closed-positions .positions-table th:nth-child(6), /* Durée */
+#closed-positions .positions-table td:nth-child(6) {
+    min-width: 100px;
+    max-width: 120px;
+}
+
+#closed-positions .positions-table th:nth-child(7), /* Gains/Pertes */
+#closed-positions .positions-table td:nth-child(7) {
+    min-width: 140px;
+    max-width: 160px;
+}
+
 
 .section-header {
     display: flex;
@@ -661,7 +729,7 @@ body {
 }
 
 .tab-content {
-    display: none;
+    margin-top: 20px;
 }
 
 .tab-content.active {
@@ -1037,3 +1105,45 @@ body {
         font-size: 18px;
     }
 }
+/* Responsive amélioré */
+@media (max-width: 1024px) {
+    .portfolio-container {
+        padding: 15px;
+    }
+    
+    .portfolio-section {
+        padding: 20px;
+    }
+    
+    .positions-table {
+        min-width: 650px;
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio-container {
+        padding: 10px;
+    }
+    
+    .portfolio-section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .positions-table {
+        min-width: 600px;
+    }
+    
+    .positions-table th,
+    .positions-table td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+    
+    .stock-info-compact .stock-symbol {
+        font-size: 12px;
+    }
+    
+    .stock-info-compact .stock-name {
+        font-size: 10px;
+    }
