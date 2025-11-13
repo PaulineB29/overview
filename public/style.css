@@ -657,144 +657,129 @@ body {
     display: block;
 }
 
-/* Grille des positions */
-.positions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
+/* STYLES POUR LE TABLEAU DES POSITIONS */
+
+.positions-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
 }
 
-.position-card {
+.positions-table th {
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 20px;
-    transition: all 0.3s ease;
-}
-
-.position-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #cbd5e1;
-}
-
-.position-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.stock-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.stock-symbol {
-    font-weight: 700;
-    font-size: 18px;
-    color: #1e293b;
-}
-
-.stock-name {
-    font-size: 14px;
-    color: #64748b;
-}
-
-.position-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
+    padding: 16px 12px;
+    text-align: left;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #e2e8f0;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
 }
 
-.position-badge.positive {
-    background: #dcfce7;
-    color: #166534;
+.positions-table th:hover {
+    background: #e2e8f0;
 }
 
-.position-badge.negative {
-    background: #fee2e2;
-    color: #991b1b;
+.positions-table th.sortable::after {
+    content: "↕";
+    color: #94a3b8;
+    font-size: 12px;
+    margin-left: 8px;
 }
 
-.position-details {
+.positions-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    color: #475569;
+    vertical-align: middle;
+}
+
+.positions-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.positions-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Style compact pour les infos actions */
+.stock-info-compact {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 2px;
 }
 
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.stock-info-compact .stock-symbol {
+    font-weight: 700;
     font-size: 14px;
+    color: #1e293b;
 }
 
-.detail-row span:first-child {
+.stock-info-compact .stock-name {
+    font-size: 12px;
     color: #64748b;
 }
 
-.detail-row span:last-child {
-    color: #1e293b;
-    font-weight: 500;
+/* Couleurs pour les gains/pertes */
+.positions-table .positive {
+    color: #10b981;
+    font-weight: 600;
 }
 
-/* Responsive */
+.positions-table .negative {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+/* Responsive pour le tableau des positions */
+@media (max-width: 1024px) {
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .positions-table {
+        min-width: 800px;
+    }
+}
+
 @media (max-width: 768px) {
-    .portfolio-container {
-        padding: 15px;
+    .positions-table {
+        min-width: 700px;
     }
     
-    .portfolio-section {
-        padding: 20px;
-        margin-bottom: 20px;
+    .positions-table th,
+    .positions-table td {
+        padding: 12px 8px;
+        font-size: 13px;
     }
     
-    .section-header {
-        flex-direction: column;
-        align-items: stretch;
+    .stock-info-compact .stock-symbol {
+        font-size: 13px;
     }
     
-    .portfolio-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .allocation-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .positions-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .position-tabs {
-        width: 100%;
-    }
-    
-    .tab-btn {
-        flex: 1;
-        text-align: center;
+    .stock-info-compact .stock-name {
+        font-size: 11px;
     }
 }
 
-@media (max-width: 480px) {
-    .allocation-item {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
+/* Animation de transition entre les tabs */
+.tab-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
-    
-    .sector-name {
-        min-width: auto;
-    }
-    
-    .position-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
