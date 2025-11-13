@@ -1,12 +1,6 @@
 // api/positions.js
 const pool = require('../db'); 
 
-// Réutiliser la même configuration que server.js
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false, require: true }
-});
-
 // GET - Récupérer toutes les positions
 async function getPositions(req, res) {
     try {
