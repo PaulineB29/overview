@@ -105,7 +105,7 @@ function displayData(data) {
             <td class="${getColorClass(item.grossMargin, 'high')}">${formatPercentage(item.grossMargin)}</td>
             <td><span class="badge ${item.recommandation ? item.recommandation.toLowerCase() : ''}">${item.recommandation || '-'}</span></td>
             <td class="${getColorClass(item.sgaMargin, 'low')}">${formatPercentage(item.sgaMargin)}</td>
-            <td class="${getColorClass(item.debtEquity, 'low')}">${formatNumber(item.debtEquity)}</td>
+            <td class="${getColorClass(item.debtToEquity, 'low')}">${formatNumber(item.debtToEquity)}</td>
             <td class="${getColorClass(item.currentRatio, 'high')}">${formatNumber(item.currentRatio)}</td>
             <td class="${getColorClass(item.interestCoverage, 'high')}">${formatNumber(item.interestCoverage)}</td>
             <td class="${getColorClass(item.peRatio, 'low')}">${formatNumber(item.peRatio)}</td>
@@ -117,7 +117,7 @@ function displayData(data) {
             <td class="${getColorClass(item.pegRatio, 'low')}">${formatNumber(item.pegRatio)}</td>
             <td class="${getColorClass(item.roic, 'high')}">${formatPercentage(item.roic)}</td>
             <td class="${getColorClass(item.freeCashFlow, 'high')}">${formatCurrency(item.freeCashFlow)}</td>
-            <td class="${getColorClass(item.evToEbitda, 'low')}">${formatNumber(item.evTtoEbitda)}</td>
+            <td class="${getColorClass(item.evToEbitda, 'low')}">${formatNumber(item.evToEbitda)}</td>
         `;
         tbody.appendChild(row);
     });
