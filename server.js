@@ -106,7 +106,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'Public', 'index.html'));
 });
 
-/ Démarrer le serveur
+// Démarrer le serveur
 app.listen(port, () => {
     console.log('[START] Serveur démarré sur le port ' + port);
     console.log('[INFO] Health check: http://localhost:' + port + '/health');
