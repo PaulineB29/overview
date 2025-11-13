@@ -516,11 +516,13 @@ body {
     padding: 30px;
     margin-bottom: 30px;
     border: 1px solid #e2e8f0;
+    overflow: hidden;
 }
 
 .chart-placeholder {
     text-align: center;
     color: #64748b;
+    overflow: hidden;
 }
 
 .chart-mock {
@@ -531,6 +533,11 @@ body {
     align-items: flex-end;
     justify-content: space-around;
     padding: 0 40px;
+    justify-content: space-between; /* Meilleure répartition */
+    padding: 0 20px; /* Réduction du padding */
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .chart-line {
@@ -539,6 +546,7 @@ body {
     border-radius: 4px 4px 0 0;
     transition: all 0.3s ease;
     position: relative;
+    flex-shrink: 0;
 }
 
 .chart-line:hover {
