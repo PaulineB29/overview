@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Dashboard</title>
+    <title>Tableau d'Analyses Financières</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,80 +11,83 @@
     <nav class="top-nav-black">
         <div class="nav-container-black">
             <div class="nav-brand-black">
-                <span class="nav-title">Financial Dashboard</span>
+                <span class="nav-title">Tableau d'Analyses Financières</span>
             </div>
             <div class="nav-separator">|</div>
             <div class="nav-menu-black">
                 <button class="nav-link-black active" data-screen="financial-analysis">Analyse Financière</button>
                 <div class="nav-separator">|</div>
-                <button class="nav-link-black" data-screen="portfolio-builder">Portfolio Builder</button>
+                <button class="nav-link-black" data-screen="portfolio-tracker">Suivi Portefeuille</button>
             </div>
         </div>
     </nav>
 
     <!-- Écran Analyse Financière (actif par défaut) -->
     <div id="financial-analysis" class="screen active">
-        <div class="main-content">
-            <div class="controls">
-                <input type="text" id="globalSearch" placeholder="Rechercher...">
-                <button id="resetFilters" class="btn secondary small">Réinitialiser</button>
-                <button id="refreshData" class="btn small">Actualiser</button>
-            </div>
+        <div class="container">
+            <header class="header">
+                <h1>📊 Analyses Financières</h1>
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="globalSearch" placeholder="Rechercher...">
+                    </div>
+                    <button id="resetFilters" class="btn-reset">🔄 Réinitialiser</button>
+                    <button id="refreshData" class="btn-refresh">🔃 Actualiser</button>
+                </div>
+            </header>
             
-            <div class="stats">
-                <span id="rowCount">0</span> entreprises analysées
-                <span id="lastUpdate" class="last-update"></span>
-            </div>
-            
-            <div class="table-container">
-                <table class="data-table">
-                    <thead class="table-header">
-                        <tr>
-                            <th data-column="entreprise_nom" class="sortable">Nom Entreprise</th>
-                            <th data-column="entreprise_symbole" class="sortable">Symbole</th>
-                            <th data-column="date_analyse" class="sortable">Date Analyse</th>
-                            <th data-column="periode" class="sortable">Période</th>
-                            <th data-column="roe" class="sortable">ROE</th>
-                            <th data-column="netmargin" class="sortable">Marge Nette</th>
-                            <th data-column="grossmargin" class="sortable">Marge Brute</th>
-                            <th data-column="recommandation" class="sortable">Recommandation</th>
-                            <th data-column="sgamargin" class="sortable">Marge SGA</th>
-                            <th data-column="debtequity" class="sortable">Dette/Equity</th>
-                            <th data-column="currentratio" class="sortable">Current Ratio</th>
-                            <th data-column="interestcoverage" class="sortable">Couverture Intérêt</th>
-                            <th data-column="peratio" class="sortable">P/E Ratio</th>
-                            <th data-column="earningsyield" class="sortable">Earnings Yield</th>
-                            <th data-column="pricetofcf" class="sortable">Price to FCF</th>
-                            <th data-column="pricetomm200" class="sortable">Price to 200MA</th>
-                            <th data-column="dividendyield" class="sortable">Dividend Yield</th>
-                            <th data-column="pbratio" class="sortable">P/B Ratio</th>
-                            <th data-column="pegratio" class="sortable">PEG Ratio</th>
-                            <th data-column="roic" class="sortable">ROIC</th>
-                            <th data-column="freecashflow" class="sortable">Free Cash Flow</th>
-                            <th data-column="evtoebitda" class="sortable">EV/EBITDA</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- Les données seront insérées ici par JavaScript -->
-                    </tbody>
-                </table>
-            </div>
+            <div class="loading" id="loading">Chargement des données...</div>
+
+            <main class="main-content">
+                <div class="table-container">
+                    <table id="financialTable">
+                        <thead>
+                            <tr>
+                                <th data-column="id" class="sortable"><span>ID</span></th>
+                                <th data-column="entreprise_id" class="sortable"><span>Entreprise ID</span></th>
+                                <th data-column="entreprise_nom" class="sortable">Nom Entreprise</th>
+                                <th data-column="entreprise_symbole" class="sortable">Symbole</th>
+                                <th data-column="date_analyse" class="sortable"><span>Date Analyse</span></th>
+                                <th data-column="periode" class="sortable"><span>Période</span></th>
+                                <th data-column="roe" class="sortable"><span>ROE</span></th>
+                                <th data-column="netMargin" class="sortable"><span>Marge Nette</span></th>
+                                <th data-column="grossMargin" class="sortable"><span>Marge Brute</span></th>
+                                <th data-column="recommandation" class="sortable"><span>Recommandation</span></th>
+                                <th data-column="sgaMargin" class="sortable"><span>Marge SGA</span></th>
+                                <th data-column="debtToEquity" class="sortable"><span>Dette/Capitaux</span></th>
+                                <th data-column="currentRatio" class="sortable"><span>Ratio Courant</span></th>
+                                <th data-column="interestCoverage" class="sortable"><span>Couverture Intérêts</span></th>
+                                <th data-column="peRatio" class="sortable"><span>P/E Ratio</span></th>
+                                <th data-column="earningsYield" class="sortable"><span>Rendement</span></th>
+                                <th data-column="priceToFCF" class="sortable"><span>Price/FCF</span></th>
+                                <th data-column="priceToMM200" class="sortable"><span>Price/MM200</span></th>
+                                <th data-column="dividendYield" class="sortable"><span>Dividend Yield</span></th>
+                                <th data-column="pbRatio" class="sortable"><span>P/B Ratio</span></th>
+                                <th data-column="pegRatio" class="sortable"><span>PEG Ratio</span></th>
+                                <th data-column="roic" class="sortable"><span>ROIC</span></th>
+                                <th data-column="freeCashFlow" class="sortable"><span>Free Cash Flow</span></th>
+                                <th data-column="evToEbitda" class="sortable"><span>EV/EBITDA</span></th>
+                                <th data-column="score_global" class="sortable"><span>Score Global</span></th>
+                                <th data-column="points_forts"><span>Points Forts</span></th>
+                                <th data-column="points_faibles"><span>Points Faibles</span></th>
+                                <th data-column="created_at" class="sortable"><span>Créé le</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Les données seront insérées ici par JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
         </div>
     </div>
-
-    <!-- Écran Portfolio Builder (caché par défaut) -->
-    <div id="portfolio-builder" class="screen">
+    
+    <!-- Écran Suivi Portefeuille (CACHÉ par défaut) -->
+    <div id="portfolio-tracker" class="screen">
         <div class="main-content">
-            <div class="placeholder-content">
-                <h3>🛠️ Portfolio Builder</h3>
-                <p>Cette fonctionnalité sera bientôt disponible !</p>
-                <p>Ici vous pourrez construire et analyser votre portefeuille d'investissement.</p>
-            </div>
+            <!-- Écran vide pour le Suivi Portefeuille -->
         </div>
     </div>
-
-    <!-- Loading -->
-    <div id="loading" class="loading">Chargement des données...</div>
 
     <script src="script.js"></script>
 </body>
