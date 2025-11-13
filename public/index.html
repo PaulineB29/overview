@@ -213,7 +213,7 @@
             <!-- Section Positions Ouvertes/Fermées -->
             <section class="portfolio-section">
                 <div class="section-header">
-                    <h2>💼 Positions</h2>
+                    <h2>Positions</h2>
                     <div class="position-tabs">
                         <button class="tab-btn active" data-tab="open-positions">Positions Ouvertes</button>
                         <button class="tab-btn" data-tab="closed-positions">Positions Fermées</button>
@@ -221,189 +221,145 @@
                 </div>
 
                 <!-- Positions Ouvertes -->
-                <div id="open-positions" class="tab-content active">
-                    <div class="positions-grid">
-                        <div class="position-card">
-                            <div class="position-header">
-                                <div class="stock-info">
-                                    <span class="stock-symbol">AAPL</span>
-                                    <span class="stock-name">Apple Inc.</span>
-                                </div>
-                                <div class="position-badge positive">+18.3%</div>
+    <div id="open-positions" class="tab-content active">
+        <div class="table-container">
+            <table class="positions-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="entreprise">Nom Entreprise</th>
+                        <th class="sortable" data-column="symbole">Symbole</th>
+                        <th class="sortable" data-column="prix">Prix</th>
+                        <th class="sortable" data-column="quantite">Quantité</th>
+                        <th class="sortable" data-column="valeur">Valeur Totale</th>
+                        <th class="sortable" data-column="prixAchat">Prix d'Achat Moyen</th>
+                        <th class="sortable" data-column="gains">Gains/Pertes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="stock-info-compact">
+                                <span class="stock-symbol">AAPL</span>
+                                <span class="stock-name">Apple Inc.</span>
                             </div>
-                            <div class="position-details">
-                                <div class="detail-row">
-                                    <span>Quantité:</span>
-                                    <span>25 actions</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Prix Moyen:</span>
-                                    <span>€145.20</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Valeur Actuelle:</span>
-                                    <span class="positive">€171.80</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Investissement:</span>
-                                    <span>€3,630</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Valeur Actuelle:</span>
-                                    <span>€4,295</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Plus-value:</span>
-                                    <span class="positive">€665</span>
-                                </div>
+                        </td>
+                        <td>AAPL</td>
+                        <td>€171.80</td>
+                        <td>25</td>
+                        <td>€4,295</td>
+                        <td>€145.20</td>
+                        <td class="positive">+€665 (+18.3%)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stock-info-compact">
+                                <span class="stock-symbol">MSFT</span>
+                                <span class="stock-name">Microsoft</span>
                             </div>
-                        </div>
-
-                        <div class="position-card">
-                            <div class="position-header">
-                                <div class="stock-info">
-                                    <span class="stock-symbol">MSFT</span>
-                                    <span class="stock-name">Microsoft</span>
-                                </div>
-                                <div class="position-badge positive">+12.7%</div>
+                        </td>
+                        <td>MSFT</td>
+                        <td>€321.80</td>
+                        <td>15</td>
+                        <td>€4,827</td>
+                        <td>€285.50</td>
+                        <td class="positive">+€545 (+12.7%)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stock-info-compact">
+                                <span class="stock-symbol">TSLA</span>
+                                <span class="stock-name">Tesla Inc.</span>
                             </div>
-                            <div class="position-details">
-                                <div class="detail-row">
-                                    <span>Quantité:</span>
-                                    <span>15 actions</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Prix Moyen:</span>
-                                    <span>€285.50</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Valeur Actuelle:</span>
-                                    <span class="positive">€321.80</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Investissement:</span>
-                                    <span>€4,282</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Valeur Actuelle:</span>
-                                    <span>€4,827</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Plus-value:</span>
-                                    <span class="positive">€545</span>
-                                </div>
+                        </td>
+                        <td>TSLA</td>
+                        <td>€199.10</td>
+                        <td>10</td>
+                        <td>€1,991</td>
+                        <td>€210.00</td>
+                        <td class="negative">-€109 (-5.2%)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stock-info-compact">
+                                <span class="stock-symbol">GOOGL</span>
+                                <span class="stock-name">Alphabet Inc.</span>
                             </div>
-                        </div>
-
-                        <div class="position-card">
-                            <div class="position-header">
-                                <div class="stock-info">
-                                    <span class="stock-symbol">TSLA</span>
-                                    <span class="stock-name">Tesla Inc.</span>
-                                </div>
-                                <div class="position-badge negative">-5.2%</div>
-                            </div>
-                            <div class="position-details">
-                                <div class="detail-row">
-                                    <span>Quantité:</span>
-                                    <span>10 actions</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Prix Moyen:</span>
-                                    <span>€210.00</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Valeur Actuelle:</span>
-                                    <span class="negative">€199.10</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Investissement:</span>
-                                    <span>€2,100</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Valeur Actuelle:</span>
-                                    <span>€1,991</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Plus-value:</span>
-                                    <span class="negative">-€109</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Positions Fermées -->
-                <div id="closed-positions" class="tab-content">
-                    <div class="positions-grid">
-                        <div class="position-card">
-                            <div class="position-header">
-                                <div class="stock-info">
-                                    <span class="stock-symbol">NVDA</span>
-                                    <span class="stock-name">NVIDIA Corp.</span>
-                                </div>
-                                <div class="position-badge positive">+32.1%</div>
-                            </div>
-                            <div class="position-details">
-                                <div class="detail-row">
-                                    <span>Quantité:</span>
-                                    <span>8 actions</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Prix Achat:</span>
-                                    <span>€420.00</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Prix Vente:</span>
-                                    <span>€555.00</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Durée:</span>
-                                    <span>4 mois</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Plus-value:</span>
-                                    <span class="positive">€1,080</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="position-card">
-                            <div class="position-header">
-                                <div class="stock-info">
-                                    <span class="stock-symbol">AMZN</span>
-                                    <span class="stock-name">Amazon.com</span>
-                                </div>
-                                <div class="position-badge positive">+8.5%</div>
-                            </div>
-                            <div class="position-details">
-                                <div class="detail-row">
-                                    <span>Quantité:</span>
-                                    <span>5 actions</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Prix Achat:</span>
-                                    <span>€135.00</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Prix Vente:</span>
-                                    <span>€146.50</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Durée:</span>
-                                    <span>6 mois</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Plus-value:</span>
-                                    <span class="positive">€57.50</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        </td>
+                        <td>GOOGL</td>
+                        <td>€142.50</td>
+                        <td>8</td>
+                        <td>€1,140</td>
+                        <td>€135.75</td>
+                        <td class="positive">+€54 (+5.0%)</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <!-- Positions Fermées -->
+    <div id="closed-positions" class="tab-content">
+        <div class="table-container">
+            <table class="positions-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="entreprise">Nom Entreprise</th>
+                        <th class="sortable" data-column="symbole">Symbole</th>
+                        <th class="sortable" data-column="prixAchat">Prix d'Achat</th>
+                        <th class="sortable" data-column="prixVente">Prix de Vente</th>
+                        <th class="sortable" data-column="quantite">Quantité</th>
+                        <th class="sortable" data-column="duree">Durée</th>
+                        <th class="sortable" data-column="gains">Gains/Pertes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="stock-info-compact">
+                                <span class="stock-symbol">NVDA</span>
+                                <span class="stock-name">NVIDIA Corp.</span>
+                            </div>
+                        </td>
+                        <td>NVDA</td>
+                        <td>€420.00</td>
+                        <td>€555.00</td>
+                        <td>8</td>
+                        <td>4 mois</td>
+                        <td class="positive">+€1,080 (+32.1%)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stock-info-compact">
+                                <span class="stock-symbol">AMZN</span>
+                                <span class="stock-name">Amazon.com</span>
+                            </div>
+                        </td>
+                        <td>AMZN</td>
+                        <td>€135.00</td>
+                        <td>€146.50</td>
+                        <td>5</td>
+                        <td>6 mois</td>
+                        <td class="positive">+€57.50 (+8.5%)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stock-info-compact">
+                                <span class="stock-symbol">META</span>
+                                <span class="stock-name">Meta Platforms</span>
+                            </div>
+                        </td>
+                        <td>META</td>
+                        <td>€315.00</td>
+                        <td>€298.25</td>
+                        <td>6</td>
+                        <td>3 mois</td>
+                        <td class="negative">-€100.50 (-5.3%)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
     <script src="script.js"></script>
 </body>
