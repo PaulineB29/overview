@@ -52,7 +52,7 @@ app.get('/api/financial-data', async (req, res) => {
   }
 });
 
-/ ========== NOUVELLES ROUTES (PORTEFEUILLE) ==========
+// ========== NOUVELLES ROUTES (PORTEFEUILLE) ==========
 
 // Routes pour les positions (NOUVEAU)
 app.get('/api/positions', positionRoutes.getPositions);
