@@ -65,3 +65,11 @@ app.listen(port, () => {
     console.log('[INFO] API: http://localhost:' + port + '/api/financial-data');
     console.log('[INFO] Application: http://localhost:' + port);
 });
+
+const positionRoutes = require('./api/positions');
+
+// Routes pour les positions
+app.get('/api/positions', positionRoutes.getPositions);
+app.post('/api/positions', positionRoutes.addPosition);
+app.put('/api/positions/:id', positionRoutes.updatePosition);
+app.delete('/api/positions/:id', positionRoutes.deletePosition);
