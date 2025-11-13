@@ -17,9 +17,11 @@ function setupNavigation() {
         button.addEventListener('click', function() {
             const targetScreen = this.dataset.screen;
             
+            // Désactive tous les boutons et écrans
             navButtons.forEach(btn => btn.classList.remove('active'));
             screens.forEach(screen => screen.classList.remove('active'));
             
+            // Active le bouton et l'écran sélectionné
             this.classList.add('active');
             document.getElementById(targetScreen).classList.add('active');
         });
