@@ -233,7 +233,8 @@ function setupPositionModal() {
     if (!modal || !addBtn) return;
     
     addBtn.addEventListener('click', function() {
-        modal.classList.add('show');
+        modal.classList.add('active');
+        modal.classList.remove('active');
         document.getElementById('purchaseDate').valueAsDate = new Date();
     });
     
