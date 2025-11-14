@@ -348,12 +348,33 @@ async function addNewPosition(positionData) {
 }
 
 function displayPositions(positions) {
-    console.log('📊 Données reçues pour affichage:', positions);
+    console.log('🔍 === DIAGNOSTIC AFFICHAGE POSITIONS ===');
+    console.log('📊 Données reçues:', positions);
     
+    // Vérifier si on est sur le bon écran
+    const portfolioScreen = document.getElementById('portfolio-tracker');
+    console.log('🎯 Écran portefeuille actif:', portfolioScreen.classList.contains('active'));
+    
+    // Vérifier les tables
     const openPositionsTable = document.querySelector('#open-positions tbody');
     const closedPositionsTable = document.querySelector('#closed-positions tbody');
     
-    if (!openPositionsTable || !closedPositionsTable) return;
+    console.log('📋 Table ouverte trouvée:', !!openPositionsTable);
+    console.log('📋 Table fermée trouvée:', !!closedPositionsTable);
+    console.log('📍 Sélecteur utilisé: #open-positions tbody');
+    
+    if (!openPositionsTable || !closedPositionsTable) {
+        console.error('❌ TABLES NON TROUVÉES - Vérifiez la structure HTML');
+        
+        // Lister toutes les tables disponibles pour debug
+        const allTables = document.querySelectorAll('table');
+        console.log('📋 Toutes les tables trouvées:', allTables.length);
+        allTables.forEach((table, index) => {
+            console.log(`Table ${index}:`, table.id || table.className);
+        });
+        
+        return;
+    }
     
     openPositionsTable.innerHTML = '';
     closedPositionsTable.innerHTML = '';
@@ -363,9 +384,25 @@ function displayPositions(positions) {
 
     console.log('🔵 Positions ouvertes:', openPositions);
     console.log('🔴 Positions fermées:', closedPositions);
+
+    // Si pas de données, afficher message
+    if (openPositions.length === 0 && closedPositions.length === 0) {
+        const messageRow = document.createElement('tr');
+        messageRow.innerHTML = `
+            <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
+                Aucune position trouvée
+            </td>
+        `;
+        openPositionsTable.appendChild(messageRow);
+        console.log('ℹ️ Aucune position à afficher');
+        return;
+    }
     
     // Positions ouvertes
     openPositions.forEach(position => {
+        console.log(`🔄 Traitement position ouverte ${index + 1}:`, position);
+
+     try {
         const currentPrice = getCurrentPrice(position.entreprise_symbole);
         const prixAchat = parseFloat(position.prix_achat); 
         const quantite = parseInt(position.quantite); 
@@ -377,26 +414,34 @@ function displayPositions(positions) {
         
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>
-                <div class="stock-info-compact">
-                    <span class="stock-symbol">${position.entreprise_symbole}</span>
-                    <span class="stock-name">${position.entreprise_nom}</span>
-                </div>
-            </td>
-            <td>${position.entreprise_symbole}</td>
-            <td>€${currentPrice.toFixed(2)}</td>
-            <td>${position.quantite}</td>
-            <td>€${totalValue.toFixed(2)}</td>
-            <td>€${position.prix_achat.toFixed(2)}</td>
-            <td class="${gainLoss >= 0 ? 'positive' : 'negative'}">
-                ${gainLoss >= 0 ? '+' : ''}€${gainLoss.toFixed(2)} (${gainLoss >= 0 ? '+' : ''}${gainLossPercent.toFixed(1)}%)
-            </td>
-        `;
-        openPositionsTable.appendChild(row);
+                <td>
+                    <div class="stock-info-compact">
+                        <span class="stock-symbol">${position.entreprise_symbole}</span>
+                        <span class="stock-name">${position.entreprise_nom}</span>
+                    </div>
+                </td>
+                <td>${position.entreprise_symbole}</td>
+                <td>€${currentPrice.toFixed(2)}</td>
+                <td>${quantite}</td>
+                <td>€${totalValue.toFixed(2)}</td>
+                <td>€${prixAchat.toFixed(2)}</td>
+                <td class="${gainLoss >= 0 ? 'positive' : 'negative'}">
+                    ${gainLoss >= 0 ? '+' : ''}€${gainLoss.toFixed(2)} (${gainLoss >= 0 ? '+' : ''}${gainLossPercent.toFixed(1)}%)
+                </td>
+            `;
+            openPositionsTable.appendChild(row);
+            console.log(`✅ ${position.entreprise_symbole} ajoutée`);
+            
+        } catch (error) {
+            console.error(`❌ Erreur sur ${position.entreprise_symbole}:`, error);
+        }
     });
     
     // Positions fermées
-    closedPositions.forEach(position => {
+    closedPositions.forEach((position, index) => {
+        console.log(`🔄 Position fermée ${index + 1}:`, position);
+        
+        try {
         const prixAchat = parseFloat(position.prix_achat); 
         const prixVente = parseFloat(position.prix_vente); 
         const quantite = parseInt(position.quantite); 
@@ -425,7 +470,13 @@ function displayPositions(positions) {
             </td>
         `;
         closedPositionsTable.appendChild(row);
-    });
+        console.log(`✅ ${position.entreprise_symbole} (fermée) ajoutée`);
+                
+            } catch (error) {
+                console.error(`❌ Erreur sur position fermée ${position.entreprise_symbole}:`, error);
+            }
+        });
+        console.log('🎉 AFFICHAGE TERMINÉ');
 }
 
 // =============================================================================
