@@ -209,16 +209,17 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Section Positions Ouvertes/Fermées -->
+            
+ <!-- Section Positions Ouvertes/Fermées -->
             <section class="portfolio-section">
-                <div class="positions-header-left">
-                    <h2>Positions</h2>
-                    <button class="btn-add-position" id="addPositionBtn">
-                        <span>+</span>
-                        Ajouter une position
-                    </button>
-                </div>
+                <div class="positions-header">
+                    <div class="positions-header-left">
+                        <h2>Positions</h2>
+                        <button class="btn-add-position" id="addPositionBtn">
+                            <span>+</span>
+                            Ajouter une position
+                        </button>
+                    </div>
                     <div class="position-tabs">
                         <button class="tab-btn active" data-tab="open-positions">Positions Ouvertes</button>
                         <button class="tab-btn" data-tab="closed-positions">Positions Fermées</button>
@@ -226,49 +227,50 @@
                 </div>
 
                <!-- Positions Ouvertes -->
-    <div id="open-positions" class="tab-content active">
-        <div class="table-container">
-            <table class="positions-table">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-column="entreprise">Nom Entreprise</th>
-                        <th class="sortable" data-column="symbole">Symbole</th>
-                        <th class="sortable" data-column="prix">Prix</th>
-                        <th class="sortable" data-column="quantite">Quantité</th>
-                        <th class="sortable" data-column="valeur">Valeur Totale</th>
-                        <th class="sortable" data-column="prixAchat">Prix d'Achat Moyen</th>
-                        <th class="sortable" data-column="gains">Gains/Pertes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Contenu existant... -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+                <div id="open-positions" class="tab-content active">
+                    <div class="table-container">
+                        <table class="positions-table">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-column="entreprise">Nom Entreprise</th>
+                                    <th class="sortable" data-column="symbole">Symbole</th>
+                                    <th class="sortable" data-column="prix">Prix</th>
+                                    <th class="sortable" data-column="quantite">Quantité</th>
+                                    <th class="sortable" data-column="valeur">Valeur Totale</th>
+                                    <th class="sortable" data-column="prixAchat">Prix d'Achat Moyen</th>
+                                    <th class="sortable" data-column="gains">Gains/Pertes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Contenu existant... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-     <!-- Positions Fermées -->
-    <div id="closed-positions" class="tab-content">
-        <div class="table-container">
-            <table class="positions-table">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-column="entreprise">Nom Entreprise</th>
-                        <th class="sortable" data-column="symbole">Symbole</th>
-                        <th class="sortable" data-column="prixAchat">Prix d'Achat</th>
-                        <th class="sortable" data-column="prixVente">Prix de Vente</th>
-                        <th class="sortable" data-column="quantite">Quantité</th>
-                        <th class="sortable" data-column="duree">Durée</th>
-                        <th class="sortable" data-column="gains">Gains/Pertes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Contenu existant... -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
+                 <!-- Positions Fermées -->
+                <div id="closed-positions" class="tab-content">
+                    <div class="table-container">
+                        <table class="positions-table">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-column="entreprise">Nom Entreprise</th>
+                                    <th class="sortable" data-column="symbole">Symbole</th>
+                                    <th class="sortable" data-column="prixAchat">Prix d'Achat</th>
+                                    <th class="sortable" data-column="prixVente">Prix de Vente</th>
+                                    <th class="sortable" data-column="quantite">Quantité</th>
+                                    <th class="sortable" data-column="duree">Durée</th>
+                                    <th class="sortable" data-column="gains">Gains/Pertes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Contenu existant... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+           
 
    <!-- Popup Ajouter une position -->
     <div id="addPositionModal" class="modal">
