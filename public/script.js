@@ -234,12 +234,11 @@ function setupPositionModal() {
     
     addBtn.addEventListener('click', function() {
         modal.classList.add('active');
-        modal.classList.remove('active');
         document.getElementById('purchaseDate').valueAsDate = new Date();
     });
     
     function closeModal() {
-        modal.classList.remove('show');
+        modal.classList.remove('active');
         form.reset();
     }
     
