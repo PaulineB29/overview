@@ -287,12 +287,15 @@ function setupPositionModal() {
 
 async function loadPositions() {
     try {
+        console.log('🔄 Chargement des positions depuis API...');
         const response = await fetch('https://overview-analyse.onrender.com/api/positions');
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
         }
         
         const data = await response.json();
+        console.log('✅ Données reçues de l\'API:', data);
+        
         currentPositions = data;
         displayPositions(currentPositions);
         
@@ -323,6 +326,9 @@ async function addNewPosition(positionData) {
         }
 
         const result = await response.json();
+
+        // FORCER le rechargement des positions
+        await loadPositions();
         
         if (result.message && result.message.includes('non disponible')) {
             savePositionLocally(positionData);
@@ -342,6 +348,8 @@ async function addNewPosition(positionData) {
 }
 
 function displayPositions(positions) {
+    console.log('📊 Données reçues pour affichage:', positions);
+    
     const openPositionsTable = document.querySelector('#open-positions tbody');
     const closedPositionsTable = document.querySelector('#closed-positions tbody');
     
@@ -352,6 +360,9 @@ function displayPositions(positions) {
     
     const openPositions = positions.filter(p => p.statut === 'ouvert');
     const closedPositions = positions.filter(p => p.statut === 'ferme');
+
+    console.log('🔵 Positions ouvertes:', openPositions);
+    console.log('🔴 Positions fermées:', closedPositions);
     
     // Positions ouvertes
     openPositions.forEach(position => {
