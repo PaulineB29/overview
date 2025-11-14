@@ -295,11 +295,14 @@ async function loadPositions() {
         
         const data = await response.json();
         console.log('✅ Données reçues de l\'API:', data);
-        
+
+        console.log('🔍 Avant displayPositions');
         currentPositions = data;
         (currentPositions);
         
     } catch (error) {
+        console.error('❌ Erreur lors du chargement des positions:', error);
+        console.log('🔍 Chargement des positions locales');
         console.error('Erreur lors du chargement des positions:', error);
         displayPositions(getLocalPositions());
     }
