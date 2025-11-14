@@ -297,7 +297,7 @@ async function loadPositions() {
         console.log('✅ Données reçues de l\'API:', data);
         
         currentPositions = data;
-        displayPositions(currentPositions);
+        (currentPositions);
         
     } catch (error) {
         console.error('Erreur lors du chargement des positions:', error);
@@ -367,10 +367,13 @@ function displayPositions(positions) {
     // Positions ouvertes
     openPositions.forEach(position => {
         const currentPrice = getCurrentPrice(position.entreprise_symbole);
-        const totalValue = currentPrice * position.quantite;
-        const totalCost = position.prix_achat * position.quantite;
+        const prixAchat = parseFloat(position.prix_achat); 
+        const quantite = parseInt(position.quantite); 
+        
+        const totalValue = currentPrice * quantite;
+        const totalCost = prixAchat * quantite;
         const gainLoss = totalValue - totalCost;
-        const gainLossPercent = (gainLoss / totalCost) * 100;
+        const gainLossPercent = totalCost !== 0 ? (gainLoss / totalCost) * 100 : 0;
         
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -394,10 +397,14 @@ function displayPositions(positions) {
     
     // Positions fermées
     closedPositions.forEach(position => {
-        const totalCost = position.prix_achat * position.quantite;
-        const totalValue = position.prix_vente * position.quantite;
+        const prixAchat = parseFloat(position.prix_achat); 
+        const prixVente = parseFloat(position.prix_vente); 
+        const quantite = parseInt(position.quantite); 
+        
+        const totalCost = prixAchat * quantite;
+        const totalValue = prixVente * quantite;
         const gainLoss = totalValue - totalCost;
-        const gainLossPercent = (gainLoss / totalCost) * 100;
+        const gainLossPercent = totalCost !== 0 ? (gainLoss / totalCost) * 100 : 0;
         const duration = calculateDuration(position.date_achat, position.date_vente);
         
         const row = document.createElement('tr');
