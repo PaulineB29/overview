@@ -194,7 +194,7 @@ body {
     font-size: 16px;
 }
 
-.loading.show {
+.loading.active {
     display: block;
 }
 
@@ -913,7 +913,7 @@ body {
     animation: fadeIn 0.3s ease;
 }
 
-.modal.show {
+.modal.active {
     display: flex;
     align-items: center;
     justify-content: center;
