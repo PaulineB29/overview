@@ -364,7 +364,7 @@ function displayPositions(positions) {
     closedPositionsTable.innerHTML = '';
 
     // Si pas de données, afficher message
-    if (openPositions.length === 0 && closedPositions.length === 0) {
+    if (mergedOpenPositions.length === 0 && mergedClosedPositions.length === 0) {
         const messageRow = document.createElement('tr');
         messageRow.innerHTML = `
             <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
@@ -377,8 +377,9 @@ function displayPositions(positions) {
     }
     
     // Afficher les positions ouvertes fusionnées
-    mergedOpenPositions.forEach((position, index) => {
-        console.log(`🔄 Traitement position ouverte ${index + 1}:`, position);
+     if (mergedOpenPositions.length > 0) {
+        mergedOpenPositions.forEach((position, index) => {
+            console.log(`🔄 Traitement position ouverte ${index + 1}:`, position);
 
         try {
             const currentPrice = getCurrentPrice(position.entreprise_symbole);
@@ -422,8 +423,9 @@ function displayPositions(positions) {
     });
     
    // Afficher les positions fermées fusionnées
-    mergedClosedPositions.forEach((position, index) => {
-        console.log(`🔄 Position fermée ${index + 1}:`, position);
+    if (mergedClosedPositions.length > 0) {
+        mergedClosedPositions.forEach((position, index) => {
+            console.log(`🔄 Position fermée ${index + 1}:`, position);
         
         try {
             const prixAchat = parseFloat(position.prix_achat); 
@@ -464,8 +466,17 @@ function displayPositions(positions) {
                 
         } catch (error) {
             console.error(`❌ Erreur sur position fermée ${position.entreprise_symbole}:`, error);
-        }
-    });
+            }
+        });
+    } else {
+        const messageRow = document.createElement('tr');
+        messageRow.innerHTML = `
+            <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
+                Aucune position fermée
+            </td>
+        `;
+        closedPositionsTable.appendChild(messageRow);
+    }
     console.log('🎉 AFFICHAGE TERMINÉ');
 }
 
