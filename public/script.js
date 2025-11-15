@@ -22,7 +22,7 @@ function initializeApp() {
     
     // Portefeuille
     loadPositions();
-    setupPortfolioTabs();
+    setupPositionsTableSorting();
     setupPositionModal();
     
     console.log('✅ Application initialisée avec succès');
@@ -204,24 +204,7 @@ function sortData(key) {
 // =============================================================================
 // MODULE PORTEFEUILLE - POSITIONS
 // =============================================================================
-function setupPortfolioTabs() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
 
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const targetTab = this.dataset.tab;
-            
-            tabBtns.forEach(btn => btn.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-            
-            this.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
-        });
-    });
-    
-    setupPositionsTableSorting();
-}
 
 function setupPositionModal() {
     const modal = document.getElementById('addPositionModal');
@@ -359,8 +342,8 @@ function displayPositions(positions) {
     console.log('🎯 Écran portefeuille actif:', portfolioScreen.classList.contains('active'));
     
     // Vérifier les tables
-    const openPositionsTable = document.querySelector('#open-positions tbody');
-    const closedPositionsTable = document.querySelector('#closed-positions tbody');
+    const openPositionsTable = document.querySelector('.positions-section:first-child tbody');
+    const closedPositionsTable = document.querySelector('.positions-section:last-child tbody');
     
     console.log('📋 Table ouverte trouvée:', !!openPositionsTable);
     console.log('📋 Table fermée trouvée:', !!closedPositionsTable);
