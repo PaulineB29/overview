@@ -281,13 +281,12 @@ async function loadPositions() {
 
         console.log('🔍 Avant ');
         currentPositions = data;
-        (currentPositions);
-        
+            
     } catch (error) {
         console.error('❌ Erreur lors du chargement des positions:', error);
         console.log('🔍 Chargement des positions locales');
         console.error('Erreur lors du chargement des positions:', error);
-        (getLocalPositions());
+        currentPositions = getLocalPositions();
     }
 }
 
