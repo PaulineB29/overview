@@ -402,7 +402,7 @@ function displayPositions(positions) {
     }
     
     // Positions ouvertes
-    openPositions.forEach(position => {
+    openPositions.forEach((position, index) => {
         console.log(`🔄 Traitement position ouverte ${index + 1}:`, position);
 
      try {
