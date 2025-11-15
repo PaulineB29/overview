@@ -46,6 +46,11 @@ function setupNavigation() {
             // Active le bouton et l'écran sélectionné
             this.classList.add('active');
             document.getElementById(targetScreen).classList.add('active');
+
+            // Affiche les positions si on va sur l'écran portefeuille
+            if (targetScreen === 'portfolio-tracker') {
+                console.log('🎯 Affichage des positions pour écran portefeuille');
+                displayPositions(currentPositions);
         });
     });
 }
