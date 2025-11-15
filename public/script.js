@@ -298,7 +298,7 @@ async function loadPositions() {
 
         console.log('🔍 Avant displayPositions');
         currentPositions = data;
-        (currentPositions);
+        displayPositions(currentPositions);
         
     } catch (error) {
         console.error('❌ Erreur lors du chargement des positions:', error);
@@ -340,7 +340,7 @@ async function addNewPosition(positionData) {
             showNotification(`Position ${positionData.stockSymbol} ajoutée avec succès!`);
         }
         
-        loadPositions();
+        await loadPositions();
         
     } catch (error) {
         console.error('Erreur lors de l\'ajout de la position:', error);
