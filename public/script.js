@@ -51,6 +51,7 @@ function setupNavigation() {
             if (targetScreen === 'portfolio-tracker') {
                 console.log('🎯 Affichage des positions pour écran portefeuille');
                 displayPositions(currentPositions);
+             }
         });
     });
 }
