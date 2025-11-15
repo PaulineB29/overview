@@ -279,15 +279,15 @@ async function loadPositions() {
         const data = await response.json();
         console.log('✅ Données reçues de l\'API:', data);
 
-        console.log('🔍 Avant displayPositions');
+        console.log('🔍 Avant ');
         currentPositions = data;
-        displayPositions(currentPositions);
+        (currentPositions);
         
     } catch (error) {
         console.error('❌ Erreur lors du chargement des positions:', error);
         console.log('🔍 Chargement des positions locales');
         console.error('Erreur lors du chargement des positions:', error);
-        displayPositions(getLocalPositions());
+        (getLocalPositions());
     }
 }
 
@@ -349,8 +349,8 @@ function displayPositions(positions) {
     console.log('🎯 Écran portefeuille actif:', portfolioScreen.classList.contains('active'));
     
     // Vérifier les tables
-    const openPositionsTable = document.querySelector('.positions-section:first-child tbody');
-    const closedPositionsTable = document.querySelector('.positions-section:last-child tbody');
+    const openPositionsTable = document.querySelector('.positions-section:first-child .table-container tbody');
+    const closedPositionsTable = document.querySelector('.positions-section:last-child .table-container tbody');
     
     console.log('📋 Table ouverte trouvée:', !!openPositionsTable);
     console.log('📋 Table fermée trouvée:', !!closedPositionsTable);
