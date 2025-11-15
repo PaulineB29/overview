@@ -336,6 +336,13 @@ async function addNewPosition(positionData) {
 function displayPositions(positions) {
     console.log('🔍 === DIAGNOSTIC AFFICHAGE POSITIONS ===');
     console.log('📊 Données reçues:', positions);
+
+    // Fusionner les positions de même entreprise
+    const mergedOpenPositions = mergePositions(positions.filter(p => p.statut === 'ouvert'));
+    const mergedClosedPositions = mergePositions(positions.filter(p => p.statut === 'ferme'));
+    
+    console.log('🔵 Positions ouvertes fusionnées:', mergedOpenPositions);
+    console.log('🔴 Positions fermées fusionnées:', mergedClosedPositions);
     
     // Vérifier si on est sur le bon écran
     const portfolioScreen = document.getElementById('portfolio-tracker');
@@ -347,18 +354,10 @@ function displayPositions(positions) {
     
     console.log('📋 Table ouverte trouvée:', !!openPositionsTable);
     console.log('📋 Table fermée trouvée:', !!closedPositionsTable);
-    console.log('📍 Sélecteur utilisé: #open-positions tbody');
-    
+       
     if (!openPositionsTable || !closedPositionsTable) {
         console.error('❌ TABLES NON TROUVÉES - Vérifiez la structure HTML');
-        
-        // Lister toutes les tables disponibles pour debug
-        const allTables = document.querySelectorAll('table');
-        console.log('📋 Toutes les tables trouvées:', allTables.length);
-        allTables.forEach((table, index) => {
-            console.log(`Table ${index}:`, table.id || table.className);
-        });
-        
+                     
         return;
     }
     
@@ -367,9 +366,6 @@ function displayPositions(positions) {
     
     const openPositions = positions.filter(p => p.statut === 'ouvert');
     const closedPositions = positions.filter(p => p.statut === 'ferme');
-
-    console.log('🔵 Positions ouvertes:', openPositions);
-    console.log('🔴 Positions fermées:', closedPositions);
 
     // Si pas de données, afficher message
     if (openPositions.length === 0 && closedPositions.length === 0) {
@@ -384,26 +380,32 @@ function displayPositions(positions) {
         return;
     }
     
-    // Positions ouvertes
-    openPositions.forEach((position, index) => {
+    // Afficher les positions ouvertes fusionnées
+    mergedOpenPositions.forEach((position, index) => {
         console.log(`🔄 Traitement position ouverte ${index + 1}:`, position);
 
-     try {
-        const currentPrice = getCurrentPrice(position.entreprise_symbole);
-        const prixAchat = parseFloat(position.prix_achat); 
-        const quantite = parseInt(position.quantite); 
-        
-        const totalValue = currentPrice * quantite;
-        const totalCost = prixAchat * quantite;
-        const gainLoss = totalValue - totalCost;
-        const gainLossPercent = totalCost !== 0 ? (gainLoss / totalCost) * 100 : 0;
-        
-        const row = document.createElement('tr');
-        row.innerHTML = `
+        try {
+            const currentPrice = getCurrentPrice(position.entreprise_symbole);
+            const prixAchat = parseFloat(position.prix_achat); 
+            const quantite = parseInt(position.quantite); 
+            
+            const totalValue = currentPrice * quantite;
+            const totalCost = prixAchat * quantite;
+            const gainLoss = totalValue - totalCost;
+            const gainLossPercent = totalCost !== 0 ? (gainLoss / totalCost) * 100 : 0;
+            
+            const row = document.createElement('tr');
+            
+            // Ajouter un indicateur si la position est fusionnée
+            const fusionIndicator = position.est_fusionnee ? 
+                `<div class="fusion-badge" title="Fusion de ${position.nombre_positions_fusionnees} positions">🔄 ${position.nombre_positions_fusionnees}</div>` : '';
+            
+            row.innerHTML = `
                 <td>
                     <div class="stock-info-compact">
                         <span class="stock-symbol">${position.entreprise_symbole}</span>
                         <span class="stock-name">${position.entreprise_nom}</span>
+                        ${fusionIndicator}
                     </div>
                 </td>
                 <td>${position.entreprise_symbole}</td>
@@ -416,54 +418,114 @@ function displayPositions(positions) {
                 </td>
             `;
             openPositionsTable.appendChild(row);
-            console.log(`✅ ${position.entreprise_symbole} ajoutée`);
+            console.log(`✅ ${position.entreprise_symbole} ajoutée (${position.est_fusionnee ? 'fusionnée' : 'simple'})`);
             
         } catch (error) {
             console.error(`❌ Erreur sur ${position.entreprise_symbole}:`, error);
         }
     });
     
-    // Positions fermées
-    closedPositions.forEach((position, index) => {
+   // Afficher les positions fermées fusionnées
+    mergedClosedPositions.forEach((position, index) => {
         console.log(`🔄 Position fermée ${index + 1}:`, position);
         
         try {
-        const prixAchat = parseFloat(position.prix_achat); 
-        const prixVente = parseFloat(position.prix_vente); 
-        const quantite = parseInt(position.quantite); 
-        
-        const totalCost = prixAchat * quantite;
-        const totalValue = prixVente * quantite;
-        const gainLoss = totalValue - totalCost;
-        const gainLossPercent = totalCost !== 0 ? (gainLoss / totalCost) * 100 : 0;
-        const duration = calculateDuration(position.date_achat, position.date_vente);
-        
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>
-                <div class="stock-info-compact">
-                    <span class="stock-symbol">${position.entreprise_symbole}</span>
-                    <span class="stock-name">${position.entreprise_nom}</span>
-                </div>
-            </td>
-            <td>${position.entreprise_symbole}</td>
-            <td>€${position.prix_achat.toFixed(2)}</td>
-            <td>€${position.prix_vente.toFixed(2)}</td>
-            <td>${position.quantite}</td>
-            <td>${duration}</td>
-            <td class="${gainLoss >= 0 ? 'positive' : 'negative'}">
-                ${gainLoss >= 0 ? '+' : ''}€${gainLoss.toFixed(2)} (${gainLoss >= 0 ? '+' : ''}${gainLossPercent.toFixed(1)}%)
-            </td>
-        `;
-        closedPositionsTable.appendChild(row);
-        console.log(`✅ ${position.entreprise_symbole} (fermée) ajoutée`);
+            const prixAchat = parseFloat(position.prix_achat); 
+            const prixVente = parseFloat(position.prix_vente); 
+            const quantite = parseInt(position.quantite); 
+            
+            const totalCost = prixAchat * quantite;
+            const totalValue = prixVente * quantite;
+            const gainLoss = totalValue - totalCost;
+            const gainLossPercent = totalCost !== 0 ? (gainLoss / totalCost) * 100 : 0;
+            const duration = calculateDuration(position.date_achat, position.date_vente);
+            
+            const row = document.createElement('tr');
+            
+            // Ajouter un indicateur si la position est fusionnée
+            const fusionIndicator = position.est_fusionnee ? 
+                `<div class="fusion-badge" title="Fusion de ${position.nombre_positions_fusionnees} positions">🔄 ${position.nombre_positions_fusionnees}</div>` : '';
+            
+            row.innerHTML = `
+                <td>
+                    <div class="stock-info-compact">
+                        <span class="stock-symbol">${position.entreprise_symbole}</span>
+                        <span class="stock-name">${position.entreprise_nom}</span>
+                        ${fusionIndicator}
+                    </div>
+                </td>
+                <td>${position.entreprise_symbole}</td>
+                <td>€${prixAchat.toFixed(2)}</td>
+                <td>€${prixVente.toFixed(2)}</td>
+                <td>${quantite}</td>
+                <td>${duration}</td>
+                <td class="${gainLoss >= 0 ? 'positive' : 'negative'}">
+                    ${gainLoss >= 0 ? '+' : ''}€${gainLoss.toFixed(2)} (${gainLoss >= 0 ? '+' : ''}${gainLossPercent.toFixed(1)}%)
+                </td>
+            `;
+            closedPositionsTable.appendChild(row);
+            console.log(`✅ ${position.entreprise_symbole} (fermée) ajoutée (${position.est_fusionnee ? 'fusionnée' : 'simple'})`);
                 
-            } catch (error) {
-                console.error(`❌ Erreur sur position fermée ${position.entreprise_symbole}:`, error);
-            }
-        });
-        console.log('🎉 AFFICHAGE TERMINÉ');
+        } catch (error) {
+            console.error(`❌ Erreur sur position fermée ${position.entreprise_symbole}:`, error);
+        }
+    });
+    console.log('🎉 AFFICHAGE TERMINÉ');
 }
+
+/ =============================================================================
+// FONCTION DE FUSION DES POSITIONS
+// =============================================================================
+function mergePositions(positions) {
+    const mergedMap = new Map();
+    
+    positions.forEach(position => {
+        const symbol = position.entreprise_symbole;
+        const name = position.entreprise_nom;
+        
+        if (!mergedMap.has(symbol)) {
+            // Première occurrence de cette entreprise
+            mergedMap.set(symbol, {
+                ...position,
+                quantite_total: parseInt(position.quantite),
+                cout_total: parseFloat(position.prix_achat) * parseInt(position.quantite),
+                positions_count: 1
+            });
+        } else {
+            // Entreprise déjà existante - fusionner
+            const existing = mergedMap.get(symbol);
+            const quantite = parseInt(position.quantite);
+            const prixAchat = parseFloat(position.prix_achat);
+            
+            existing.quantite_total += quantite;
+            existing.cout_total += prixAchat * quantite;
+            existing.positions_count += 1;
+            
+            // Calculer le prix d'achat moyen pondéré
+            existing.prix_achat_moyen = existing.cout_total / existing.quantite_total;
+            
+            // Garder la date d'achat la plus récente
+            const existingDate = new Date(existing.date_achat);
+            const newDate = new Date(position.date_achat);
+            if (newDate > existingDate) {
+                existing.date_achat = position.date_achat;
+            }
+        }
+    });
+    
+    // Convertir la Map en tableau et formater les données fusionnées
+    return Array.from(mergedMap.values()).map(mergedPosition => {
+        return {
+            ...mergedPosition,
+            quantite: mergedPosition.quantite_total,
+            prix_achat: mergedPosition.prix_achat_moyen || mergedPosition.prix_achat,
+            cout_total: mergedPosition.cout_total,
+            est_fusionnee: mergedPosition.positions_count > 1,
+            nombre_positions_fusionnees: mergedPosition.positions_count
+        };
+    });
+}
+
 
 // =============================================================================
 // MODULE UTILITAIRES
