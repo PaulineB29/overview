@@ -363,9 +363,6 @@ function displayPositions(positions) {
     
     openPositionsTable.innerHTML = '';
     closedPositionsTable.innerHTML = '';
-    
-    const openPositions = positions.filter(p => p.statut === 'ouvert');
-    const closedPositions = positions.filter(p => p.statut === 'ferme');
 
     // Si pas de données, afficher message
     if (openPositions.length === 0 && closedPositions.length === 0) {
@@ -473,7 +470,7 @@ function displayPositions(positions) {
     console.log('🎉 AFFICHAGE TERMINÉ');
 }
 
-/ =============================================================================
+// =============================================================================
 // FONCTION DE FUSION DES POSITIONS
 // =============================================================================
 function mergePositions(positions) {
