@@ -783,8 +783,6 @@ style.textContent = `
             opacity: 0;
         }
     }
-}
 `;
 document.head.appendChild(style);
 
-});
