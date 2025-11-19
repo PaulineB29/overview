@@ -427,6 +427,7 @@ function displayPositions(positions) {
             console.error(`❌ Erreur sur ${position.entreprise_symbole}:`, error);
         }
     });
+    }
     
    // Afficher les positions fermées fusionnées
     if (mergedClosedPositions.length > 0) {
@@ -474,7 +475,8 @@ function displayPositions(positions) {
             console.error(`❌ Erreur sur position fermée ${position.entreprise_symbole}:`, error);
             }
         });
-    } else {
+    } 
+    else {
         const messageRow = document.createElement('tr');
         messageRow.innerHTML = `
             <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
