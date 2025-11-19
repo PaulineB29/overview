@@ -125,7 +125,7 @@ function displayData(data) {
     if (data.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="22" style="text-align: center; padding: 40px; color: #64748b;">
+                <td colspan="23" style="text-align: center; padding: 40px; color: #64748b;">
                     Aucune donnée trouvée
                 </td>
             </tr>
