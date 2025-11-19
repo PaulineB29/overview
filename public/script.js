@@ -142,6 +142,7 @@ function displayData(data) {
             <td>${item.entreprise_symbole || '-'}</td>
             <td>${formatDate(item.date_analyse)}</td>
             <td>${item.periode}</td>
+            <td>${formatDate(item.date_publication)}</td>
             <td class="${getColorClass(item.roe, 'high')}">${formatPercentage(item.roe)}</td>
             <td class="${getColorClass(item.netMargin, 'high')}">${formatPercentage(item.netMargin)}</td>
             <td class="${getColorClass(item.grossMargin, 'high')}">${formatPercentage(item.grossMargin)}</td>
