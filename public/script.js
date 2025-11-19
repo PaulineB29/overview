@@ -738,19 +738,6 @@ function showNotification(message) {
         </div>
     `;
     
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: #10b981;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        z-index: 1001;
-        animation: slideInRight 0.3s ease;
-    `;
-    
     document.body.appendChild(notification);
     
     setTimeout(() => {
@@ -758,31 +745,3 @@ function showNotification(message) {
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
-
-// Styles pour les notifications
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
