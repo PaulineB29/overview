@@ -255,8 +255,6 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border-bottom: 2px solid #e2e8f0;
-    position: sticky;
-    top: 0;
     cursor: pointer;
     user-select: none;
     transition: background-color 0.2s ease;
