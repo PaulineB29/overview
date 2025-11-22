@@ -235,6 +235,15 @@ body {
     min-width: 2500px; /* CONSERVE le scroll horizontal */
 }
 
+    /* FIXER LA PREMIÈRE LIGNE DU TABLEAU (EN-TÊTES) */
+#financialTable thead th {
+    position: sticky;
+    top: 0;
+    background: #f1f5f9;
+    z-index: 100;
+    border-bottom: 2px solid #e2e8f0;
+}
+
 /* En-tête fixe pendant le scroll vertical */
 #financialTable th {
     background: #f1f5f9;
