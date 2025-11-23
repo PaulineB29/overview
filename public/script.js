@@ -207,7 +207,25 @@ function sortData(key) {
 
     displayData(sortedData);
 }
-
+// Filtrer par recommandation
+document.getElementById('recommendationFilter').addEventListener('change', function() {
+    const selectedValue = this.value;
+    const table = document.getElementById('financialTable');
+    const rows = table.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        const recommendationCell = row.querySelector('td[data-column="recommandation"]');
+        if (recommendationCell) {
+            const recommendation = recommendationCell.textContent.trim();
+            
+            if (!selectedValue || recommendation === selectedValue) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+});
 // =============================================================================
 // MODULE PORTEFEUILLE - POSITIONS
 // =============================================================================
