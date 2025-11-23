@@ -43,7 +43,18 @@
                             <tr>
                                 <th data-column="entreprise_nom" class="sortable">Nom Entreprise</th>
                                 <th data-column="entreprise_symbole" class="sortable">Symbole</th>
-                                <th data-column="recommandation" class="sortable"><span>Recommandation</span></th>
+                                <th data-column="recommandation" class="sortable filter-header">
+                                    <div class="filter-header-content">
+                                        <span>Recommandation</span>
+                                        <select class="column-filter" data-column="recommandation">
+                                            <option value="">Toutes</option>
+                                            <option value="EXCELLENT">Excellent</option>
+                                            <option value="BON">Bon</option>
+                                            <option value="MOYEN">Moyen</option>
+                                            <option value="FAIBLE">Faible</option>
+                                        </select>
+                                    </div>
+                                </th>
                                 <th data-column="date_publication" class="sortable"><span>Date Publication</span></th>
                                 <th data-column="periode" class="sortable"><span>Période</span></th>
                                 <th data-column="roe" class="sortable"><span>ROE</span></th>
