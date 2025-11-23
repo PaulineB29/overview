@@ -1216,3 +1216,37 @@ body {
 .notification-content span {
     font-size: 18px;
 }
+/* Style pour l'en-tête avec filtre */
+.filter-header {
+    min-width: 180px;
+}
+
+.filter-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.column-filter {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 11px;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.column-filter:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.column-filter option {
+    font-size: 11px;
+    padding: 4px;
+}
