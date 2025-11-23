@@ -235,6 +235,16 @@ body {
     min-width: 2500px; /* CONSERVE le scroll horizontal */
 }
 
+#financialTable th:first-child,
+#financialTable td:first-child {
+    max-width: 200px;
+    min-width: 150px;
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
     /* FIXER LA PREMIÈRE LIGNE DU TABLEAU (EN-TÊTES) */
 #financialTable thead th {
     position: sticky;
