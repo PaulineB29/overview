@@ -119,34 +119,90 @@ function setupEventListeners() {
     });
 }
 
-// Filtrage par colonne recommandation
-function setupColumnFilters() {
-    document.querySelectorAll('.column-filter').forEach(select => {
-        select.addEventListener('change', function() {
-            const column = this.dataset.column;
-            const selectedValue = this.value;
-            
-            const rows = document.querySelectorAll('#financialTable tbody tr');
-            let visibleCount = 0;
-            
-            rows.forEach(row => {
-                // Trouve l'index de la colonne recommandation (3ème colonne)
-                const recommendationCell = row.querySelector('td:nth-child(3)');
-                if (recommendationCell) {
-                    const cellValue = recommendationCell.textContent.trim();
-                    
-                    if (!selectedValue || cellValue === selectedValue) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                }
-            });
-            
-            updateRowCount(visibleCount);
+// Filtrage par icône de recommandation
+function setupIconFilter() {
+    const filterIcon = document.querySelector('.filter-icon');
+    let currentFilter = '';
+    
+    filterIcon.addEventListener('click', function() {
+        showFilterMenu(this);
+    });
+}
+
+function showFilterMenu(icon) {
+    // Supprime le menu existant
+    const existingMenu = document.querySelector('.filter-menu');
+    if (existingMenu) {
+        existingMenu.remove();
+        return;
+    }
+    
+    // Crée le menu
+    const menu = document.createElement('div');
+    menu.className = 'filter-menu';
+    menu.innerHTML = `
+        <div class="filter-option" data-value="">Toutes</div>
+        <div class="filter-option" data-value="EXCELLENT">Excellent</div>
+        <div class="filter-option" data-value="BON">Bon</div>
+        <div class="filter-option" data-value="MOYEN">Moyen</div>
+        <div class="filter-option" data-value="FAIBLE">Faible</div>
+    `;
+    
+    // Positionne le menu
+    const rect = icon.getBoundingClientRect();
+    menu.style.position = 'fixed';
+    menu.style.top = `${rect.bottom + window.scrollY}px`;
+    menu.style.left = `${rect.left + window.scrollX}px`;
+    menu.style.zIndex = '1000';
+    
+    document.body.appendChild(menu);
+    
+    // Gère les clics sur les options
+    menu.querySelectorAll('.filter-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const selectedValue = this.dataset.value;
+            applyRecommendationFilter(selectedValue, icon);
+            menu.remove();
         });
     });
+    
+    // Ferme le menu en cliquant ailleurs
+    setTimeout(() => {
+        document.addEventListener('click', function closeMenu(e) {
+            if (!menu.contains(e.target) && e.target !== icon) {
+                menu.remove();
+                document.removeEventListener('click', closeMenu);
+            }
+        });
+    }, 100);
+}
+
+function applyRecommendationFilter(selectedValue, icon) {
+    const rows = document.querySelectorAll('#financialTable tbody tr');
+    let visibleCount = 0;
+    
+    rows.forEach(row => {
+        const recommendationCell = row.querySelector('td:nth-child(3)');
+        if (recommendationCell) {
+            const cellValue = recommendationCell.textContent.trim();
+            
+            if (!selectedValue || cellValue === selectedValue) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+    
+    // Met à jour l'état de l'icône
+    if (selectedValue) {
+        icon.classList.add('active');
+    } else {
+        icon.classList.remove('active');
+    }
+    
+    updateRowCount(visibleCount);
 }
 
 function displayData(data) {
