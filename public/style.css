@@ -1216,37 +1216,39 @@ body {
 .notification-content span {
     font-size: 18px;
 }
-/* Style pour l'en-tête avec filtre */
-.filter-header {
-    min-width: 180px;
-}
-
-.filter-header-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
-}
-
-.column-filter {
-    width: 100%;
-    padding: 6px 8px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 11px;
+.filter-menu {
     background: white;
-    color: #374151;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    min-width: 140px;
+    animation: fadeIn 0.2s ease;
+}
+
+.filter-option {
+    padding: 8px 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #334155;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.column-filter:focus {
-    outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+.filter-option:hover {
+    background: #f1f5f9;
 }
 
-.column-filter option {
-    font-size: 11px;
-    padding: 4px;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
