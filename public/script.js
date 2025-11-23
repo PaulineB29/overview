@@ -87,6 +87,9 @@ function setupEventListeners() {
     if (globalSearch) {
         globalSearch.addEventListener('input', function(e) {
             filterData(e.target.value);
+    
+    // Initialiser le filtre de colonne
+    setupColumnFilters();
         });
     }
 
@@ -112,6 +115,36 @@ function setupEventListeners() {
         th.addEventListener('click', function() {
             const column = this.dataset.column;
             sortData(column);
+        });
+    });
+}
+
+// Filtrage par colonne recommandation
+function setupColumnFilters() {
+    document.querySelectorAll('.column-filter').forEach(select => {
+        select.addEventListener('change', function() {
+            const column = this.dataset.column;
+            const selectedValue = this.value;
+            
+            const rows = document.querySelectorAll('#financialTable tbody tr');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                // Trouve l'index de la colonne recommandation (3ème colonne)
+                const recommendationCell = row.querySelector('td:nth-child(3)');
+                if (recommendationCell) {
+                    const cellValue = recommendationCell.textContent.trim();
+                    
+                    if (!selectedValue || cellValue === selectedValue) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+            
+            updateRowCount(visibleCount);
         });
     });
 }
