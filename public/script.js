@@ -140,27 +140,27 @@ function displayData(data) {
         row.innerHTML = `
             <td><strong>${item.entreprise_nom || '-'}</strong></td>
             <td>${item.entreprise_symbole || '-'}</td>
-            <td>${formatDate(item.date_analyse)}</td>
-            <td>${item.periode}</td>
+            <td><span class="badge ${item.recommandation ? item.recommandation.toLowerCase() : ''}">${item.recommandation || '-'}</span></td>
             <td>${formatDate(item.date_publication)}</td>
+            <td>${item.periode}</td>
             <td class="${getColorClass(item.roe, 'high')}">${formatPercentage(item.roe)}</td>
+            <td class="${getColorClass(item.roic, 'high')}">${formatPercentage(item.roic)}</td>
             <td class="${getColorClass(item.netMargin, 'high')}">${formatPercentage(item.netMargin)}</td>
             <td class="${getColorClass(item.grossMargin, 'high')}">${formatPercentage(item.grossMargin)}</td>
-            <td><span class="badge ${item.recommandation ? item.recommandation.toLowerCase() : ''}">${item.recommandation || '-'}</span></td>
-            <td class="${getColorClass(item.sgaMargin, 'low')}">${formatPercentage(item.sgaMargin)}</td>
             <td class="${getColorClass(item.debtToEquity, 'low')}">${formatNumber(item.debtToEquity)}</td>
             <td class="${getColorClass(item.currentRatio, 'high')}">${formatNumber(item.currentRatio)}</td>
             <td class="${getColorClass(item.interestCoverage, 'high')}">${formatNumber(item.interestCoverage)}</td>
-            <td class="${getColorClass(item.peRatio, 'low')}">${formatNumber(item.peRatio)}</td>
-            <td class="${getColorClass(item.earningsYield, 'high')}">${formatPercentage(item.earningsYield)}</td>
-            <td class="${getColorClass(item.priceToFCF, 'low')}">${formatNumber(item.priceToFCF)}</td>
-            <td class="${getColorClass(item.priceToMM200, 'low')}">${formatNumber(item.priceToMM200)}</td>
-            <td class="${getColorClass(item.dividendYield, 'high')}">${formatPercentage(item.dividendYield)}</td>
-            <td class="${getColorClass(item.pbRatio, 'low')}">${formatNumber(item.pbRatio)}</td>
-            <td class="${getColorClass(item.pegRatio, 'low')}">${formatNumber(item.pegRatio)}</td>
-            <td class="${getColorClass(item.roic, 'high')}">${formatPercentage(item.roic)}</td>
             <td class="${getColorClass(item.freeCashFlow, 'high')}">${formatCurrency(item.freeCashFlow)}</td>
+            <td class="${getColorClass(item.peRatio, 'low')}">${formatNumber(item.peRatio)}</td>
+            <td class="${getColorClass(item.pbRatio, 'low')}">${formatNumber(item.pbRatio)}</td>          
+            <td class="${getColorClass(item.pegRatio, 'low')}">${formatNumber(item.pegRatio)}</td>
+            <td class="${getColorClass(item.priceToFCF, 'low')}">${formatNumber(item.priceToFCF)}</td>
             <td class="${getColorClass(item.evToEbitda, 'low')}">${formatNumber(item.evToEbitda)}</td>
+            <td class="${getColorClass(item.earningsYield, 'high')}">${formatPercentage(item.earningsYield)}</td>
+             <td class="${getColorClass(item.dividendYield, 'high')}">${formatPercentage(item.dividendYield)}</td>
+            <td class="${getColorClass(item.priceToMM200, 'low')}">${formatNumber(item.priceToMM200)}</td>
+            <td class="${getColorClass(item.sgaMargin, 'low')}">${formatPercentage(item.sgaMargin)}</td>
+            <td>${formatDate(item.date_analyse)}</td>
         `;
         tbody.appendChild(row);
     });
